@@ -1,0 +1,13 @@
+body {
+  background: url("/image/bg.jpg");
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-position: center;
+}
+* {
+  cursor: url("/image/c1.ico"), auto !important;
+}
+:active {
+  cursor: url("/image/c2.ico"), auto !important;
+}
