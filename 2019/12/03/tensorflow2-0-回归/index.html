@@ -103,6 +103,68 @@
             <div class="container">
     
     
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">Expand all</a>
+        <a onclick="go_top()">Back to top</a>
+        <a onclick="go_bottom()">Go to bottom</a>
+    </div>
+</div>
+
+<script>
+    document.ready(
+        function () {
+            tocbot.init({
+                tocSelector: '.tocbot-list',
+                contentSelector: '.post-content',
+                headingSelector: 'h1, h2, h3, h4, h5',
+                collapseDepth: 1,
+                orderedList: false,
+                scrollSmooth: true,
+            })
+        }
+    )
+
+    function expand_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 6,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "collapse_toc()");
+        b.innerHTML = "Collapse all"
+    }
+
+    function collapse_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 1,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "expand_toc()");
+        b.innerHTML = "Expand all"
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+</script>
+    
 
     
     <article class="post-wrap">
@@ -132,7 +194,32 @@
         </header>
 
         <div class="post-content">
-            
+            <h2 id="梯度下降与回归原理"><a href="#梯度下降与回归原理" class="headerlink" title="梯度下降与回归原理"></a>梯度下降与回归原理</h2><p><a href="https://zhuanlan.zhihu.com/p/39105958" target="_blank" rel="noopener">https://zhuanlan.zhihu.com/p/39105958</a></p>
+<h2 id="线性模型实战"><a href="#线性模型实战" class="headerlink" title="线性模型实战"></a>线性模型实战</h2><p>在介绍了用于优化𝑤和𝑏的梯度下降算法后，我们来实战训练单输入神经元线性模型。首先我们需要采样自真实模型的多组数据，对于已知真实模型的玩具样例(Toy Example)，我们直接从指定的𝑤 = 1.477 , 𝑏 = 0.089 的真实模型中直接采样。</p>
+<ol>
+<li><p>采样数据</p>
+<p>为了能够很好地模拟真实样本的观测误差，我们给模型添加误差自变量𝜖，它采样自均值为0，方差为0.01 的高斯分布：𝑦 = 1.477𝑥 + 0.089 + 𝜖, 𝜖 ∼ 𝒩( 0, 1)。通过随机采样𝑛 = 100 次，我们获得𝑛个样本的训练数据集𝔻。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line">data = []<span class="comment"># 保存样本集的列表</span></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">100</span>): <span class="comment"># 循环采样100 个点</span></span><br><span class="line">	x = np.random.uniform(<span class="number">-10.</span>, <span class="number">10.</span>) <span class="comment"># 随机采样输入x</span></span><br><span class="line">	<span class="comment"># 采样高斯噪声</span></span><br><span class="line">	eps = np.random.normal(<span class="number">0.</span>, <span class="number">1</span>)</span><br><span class="line">	<span class="comment"># 得到模型的输出</span></span><br><span class="line">	y = <span class="number">1.477</span> * x + <span class="number">0.089</span> + eps</span><br><span class="line">	data.append([x, y]) <span class="comment"># 保存样本点</span></span><br><span class="line">data = np.array(data)</span><br><span class="line">plt.figure()</span><br><span class="line">plt.scatter(data[:,<span class="number">0</span>],data[:,<span class="number">1</span>])</span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
+
+<img src="image1.png" width="50%">
+</li>
+<li><p>计算误差<br>循环计算在每个点(𝑥(𝑖), 𝑦(𝑖))处的预测值与真实值之间差的平方并累加，从而获得训练集上的均方差。最后的误差和除以数据样本总数，从而得到每个样本上的平均误差。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">mse</span><span class="params">(b, w, points)</span>:</span></span><br><span class="line">    <span class="comment"># 根据当前的w,b 参数计算均方差损失</span></span><br><span class="line">    totalError = <span class="number">0</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">0</span>, len(points)): <span class="comment"># 循环迭代所有点</span></span><br><span class="line">        x = points[i, <span class="number">0</span>] <span class="comment"># 获得i 号点的输入x</span></span><br><span class="line">        y = points[i, <span class="number">1</span>] <span class="comment"># 获得i 号点的输出y</span></span><br><span class="line">        <span class="comment"># 计算差的平方，并累加</span></span><br><span class="line">        totalError += (y - (w * x + b)) ** <span class="number">2</span></span><br><span class="line">    <span class="comment"># 将累加的误差求平均，得到均方差</span></span><br><span class="line">    <span class="keyword">return</span> totalError / float(len(points))</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>计算梯度</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">step_gradient</span><span class="params">(b_current, w_current, points, lr)</span>:</span></span><br><span class="line">    <span class="comment"># 计算误差函数在所有点上的导数，并更新w,b</span></span><br><span class="line">    b_gradient = <span class="number">0</span></span><br><span class="line">    w_gradient = <span class="number">0</span></span><br><span class="line">    M = float(len(points)) <span class="comment"># 总样本数</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">0</span>, len(points)):</span><br><span class="line">        x = points[i, <span class="number">0</span>]</span><br><span class="line">        y = points[i, <span class="number">1</span>]</span><br><span class="line">        <span class="comment"># 误差函数对b 的导数：grad_b = 2(wx+b-y)，参考公式(2.3)</span></span><br><span class="line">        b_gradient += (<span class="number">2</span>/M) * ((w_current * x + b_current) - y)</span><br><span class="line">        <span class="comment"># 误差函数对w 的导数：grad_w = 2(wx+b-y)*x，参考公式(2.2)</span></span><br><span class="line">        w_gradient += (<span class="number">2</span>/M) * x * ((w_current * x + b_current) - y)</span><br><span class="line">    <span class="comment"># 根据梯度下降算法更新 w',b',其中lr 为学习率</span></span><br><span class="line">    new_b = b_current - (lr * b_gradient)</span><br><span class="line">    new_w = w_current - (lr * w_gradient)</span><br><span class="line">    <span class="keyword">return</span> [new_b, new_w]</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>梯度更新</p>
+<p>在计算出误差函数在𝑤和𝑏处的梯度后，我们可以更新𝑤和𝑏的值。我们把<br>对数据集的所有样本训练一次称为一个Epoch，共循环迭num_iterations 个Epoch。实现如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">gradient_descent</span><span class="params">(points, starting_b, starting_w, lr, num_iterations)</span>:</span></span><br><span class="line">    <span class="comment"># 循环更新w,b 多次</span></span><br><span class="line">    b = starting_b <span class="comment"># b 的初始值</span></span><br><span class="line">    w = starting_w <span class="comment"># w 的初始值</span></span><br><span class="line">    <span class="comment"># 根据梯度下降算法更新多次</span></span><br><span class="line">    <span class="keyword">for</span> step <span class="keyword">in</span> range(num_iterations):</span><br><span class="line">        <span class="comment"># 计算梯度并更新一次</span></span><br><span class="line">        b, w = step_gradient(b, w, np.array(points), lr)</span><br><span class="line">        loss = mse(b, w, points) <span class="comment"># 计算当前的均方差，用于监控训练进度</span></span><br><span class="line">        <span class="keyword">if</span> step%<span class="number">50</span> == <span class="number">0</span>: <span class="comment"># 打印误差和实时的w,b 值</span></span><br><span class="line">        	print(<span class="string">f"iteration:<span class="subst">&#123;step&#125;</span>, loss:<span class="subst">&#123;loss&#125;</span>, w:<span class="subst">&#123;w&#125;</span>, b:<span class="subst">&#123;b&#125;</span>"</span>)</span><br><span class="line">    <span class="keyword">return</span> [b, w],loss <span class="comment"># 返回最后一次的w,b</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">main</span><span class="params">()</span>:</span></span><br><span class="line">    lr = <span class="number">0.01</span> <span class="comment"># 学习率</span></span><br><span class="line">    initial_b = <span class="number">0</span> <span class="comment"># 初始化b 为0</span></span><br><span class="line">    initial_w = <span class="number">0</span> <span class="comment"># 初始化w 为0</span></span><br><span class="line">    num_iterations = <span class="number">1000</span></span><br><span class="line">    <span class="comment"># 训练优化1000 次，返回最优w*,b*和训练Loss 的下降过程</span></span><br><span class="line">    [b, w], losses = gradient_descent(data, initial_b, initial_w, lr, num_iterations)</span><br><span class="line">    loss = mse(b, w, data) <span class="comment"># 计算最优数值解w,b 上的均方差</span></span><br><span class="line">    print(<span class="string">f'Final loss:<span class="subst">&#123;loss&#125;</span>, w:<span class="subst">&#123;w&#125;</span>, b:<span class="subst">&#123;b&#125;</span>'</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">    main()</span><br></pre></td></tr></table></figure>
+
+<p>最终结果<code>Final loss:0.8330716368796915, w:1.4720731677669474, b:-0.09017864735741735</code>与真实值比较接近了。</p>
+</li>
+</ol>
+<p>上述例子比较好地展示了梯度下降算法在求解模型参数上的强大之处。需要注意的是，对于复杂的非线性模型，通过梯度下降算法求解到的𝑤和𝑏可能是局部极小值而非全局最小值解，这是由模型函数的非凸性决定的。但是我们在实践中发现，通过梯度下降算法求得的数值解，它的性能往往都能优化得很好，可以直接使用求解到的数值解𝑤和𝑏来近似作为最优解。</p>
+
         </div>
 
         
