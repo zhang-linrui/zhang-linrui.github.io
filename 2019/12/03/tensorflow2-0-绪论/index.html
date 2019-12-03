@@ -103,6 +103,68 @@
             <div class="container">
     
     
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">Expand all</a>
+        <a onclick="go_top()">Back to top</a>
+        <a onclick="go_bottom()">Go to bottom</a>
+    </div>
+</div>
+
+<script>
+    document.ready(
+        function () {
+            tocbot.init({
+                tocSelector: '.tocbot-list',
+                contentSelector: '.post-content',
+                headingSelector: 'h1, h2, h3, h4, h5',
+                collapseDepth: 1,
+                orderedList: false,
+                scrollSmooth: true,
+            })
+        }
+    )
+
+    function expand_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 6,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "collapse_toc()");
+        b.innerHTML = "Collapse all"
+    }
+
+    function collapse_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 1,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "expand_toc()");
+        b.innerHTML = "Expand all"
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+</script>
+    
 
     
     <article class="post-wrap">
@@ -116,7 +178,7 @@
 
                     
                         <span class="post-time">
-                        Date: <a href="#">December 3, 2019&nbsp;&nbsp;10:16:57</a>
+                        Date: <a href="#">December 3, 2019&nbsp;&nbsp;11:50:20</a>
                         </span>
                     
                     
@@ -132,7 +194,32 @@
         </header>
 
         <div class="post-content">
-            
+            <h2 id="主流深度学习框架"><a href="#主流深度学习框架" class="headerlink" title="主流深度学习框架"></a>主流深度学习框架</h2><img src="image1.jpg">
+
+<ul>
+<li>PyTorch是Facebook 基于原有的Torch 框架推出的采用Python 作为主要开发语言的深度学习框架。PyTorch 借鉴了Chainer 的设计风格，采用命令式编程，使得搭建网络和调试网络非常方便。尽管PyTorch 在2017 年才发布，但是由于精良紧凑的接口设计，PyTorch 在学术界获得了广泛好评。在PyTorch 1.0 版本后，原来的PyTorch 与Caffe2进行了合并，弥补了PyTorch 在工业部署方面的不足。总的来说，PyTorch 是一个非常优秀的深度学习框架。</li>
+<li>Keras 是一个基于Theano 和TensorFlow 等框架提供的底层运算而实现的高层框架，提供了大量方便快速训练，测试的高层接口，对于常见应用来说，使用Keras 开发效率非常高。但是由于没有底层实现，需要对底层框架进行抽象，运行效率不高，灵活性一般。</li>
+<li>TensorFlow 是Google 于2015 年发布的深度学习框架，最初版本只支持符号式编程。得益于发布时间较早，以及Google 在深度学习领域的影响力，TensorFlow 很快成为最流行的深度学习框架。但是由于TensorFlow 接口设计频繁变动，功能设计重复冗余，符号式编程开发和调试非常困难等问题，TensorFlow 1.x 版本一度被业界诟病。2019年，Google 推出TensorFlow 2 正式版本，将以动态图优先模式运行，从而能够避免<br>TensorFlow 1.x 版本的诸多缺陷，已获得业界的广泛认可。</li>
+</ul>
+<h2 id="Tensorflow-V-S-PyTorch"><a href="#Tensorflow-V-S-PyTorch" class="headerlink" title="Tensorflow V.S. PyTorch"></a>Tensorflow V.S. PyTorch</h2><p>目前来看，TensorFlow 和PyTorch 框架是业界使用最为广泛的两个深度学习框架，TensorFlow 在工业界拥有完备的解决方案和用户基础，PyTorch 得益于其精简灵活的接口设计，可以快速设计调试网络模型，在学术界获得好评如潮。TensorFlow 2 发布后，弥补了TensorFlow 在上手难度方面的不足，使得用户可以既能轻松上手TensorFlow 框架，又能无缝部署网络模型至工业系统。这里特别介绍TensorFlow 与Keras 之间的联系与区别。Keras 可以理解为一套高层API 的设计规范，Keras 本身对这套规范有官方的实现，在TensorFlow 中也实现了这套规范，称为tf.keras 模块，并且tf.keras 将作为TensorFlow 2 版本的唯一高层接口，避免出现接口重复冗余的问题。如无特别说明，后文中Keras 均指代tf.keras。</p>
+<h2 id="Tensorflow1-X-V-S-Tensorflow2-X"><a href="#Tensorflow1-X-V-S-Tensorflow2-X" class="headerlink" title="Tensorflow1.X V.S. Tensorflow2.X"></a>Tensorflow1.X V.S. Tensorflow2.X</h2><p>TensorFlow 2 是一个与TensorFlow 1.x 使用体验完全不同的框架，TensorFlow 2 <strong>不兼容</strong>TensorFlow 1.x 的代码，同时在编程风格、函数接口设计等上也大相径庭，TensorFlow 1.x的代码需要依赖人工的方式迁移，自动化迁移方式并不靠谱。Google <strong>即将停止</strong>支持TensorFlow 1.x，不建议学习TensorFlow 1.x 版本。TensorFlow 2 支持动态图优先模式，在计算时可以同时获得计算图与数值结果，可以代码中调试实时打印数据，搭建网络也像搭积木一样，层层堆叠，非常符合软件开发思维。<br>以简单的2.0 + 4.0的相加运算为例，在TensorFlow 1.x 中，首先创建计算图：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> tensorflow <span class="keyword">as</span> tf</span><br><span class="line"><span class="comment"># 1.创建计算图阶段</span></span><br><span class="line"><span class="comment"># 创建2 个输入端子，指定类型和名字</span></span><br><span class="line">a_ph = tf.placeholder(tf.float32, name=<span class="string">'variable_a'</span>)</span><br><span class="line">b_ph = tf.placeholder(tf.float32, name=<span class="string">'variable_b'</span>)</span><br><span class="line"><span class="comment"># 创建输出端子的运算操作，并命名</span></span><br><span class="line">c_op = tf.add(a_ph, b_ph, name=<span class="string">'variable_c'</span>)</span><br><span class="line"><span class="comment"># 2.运行计算图阶段</span></span><br><span class="line"><span class="comment"># 创建运行环境</span></span><br><span class="line">sess = tf.InteractiveSession()</span><br><span class="line"><span class="comment"># 初始化步骤也需要作为操作运行</span></span><br><span class="line">init = tf.global_variables_initializer()</span><br><span class="line">sess.run(init) <span class="comment"># 运行初始化操作，完成初始化</span></span><br><span class="line"><span class="comment"># 运行输出端子，需要给输入端子赋值</span></span><br><span class="line">c_numpy = sess.run(c_op, feed_dict=&#123;a_ph: <span class="number">2.</span>, b_ph: <span class="number">4.</span>&#125;)</span><br><span class="line"><span class="comment"># 运算完输出端子才能得到数值类型的c_numpy</span></span><br><span class="line">print(<span class="string">'a+b='</span>,c_numpy)</span><br></pre></td></tr></table></figure>
+
+<p>创建计算图的过程就类比通过符号建立公式𝑐 = 𝑎 + 𝑏的过程，仅仅是记录了公式的计算步骤，并没有实际计算公式的数值结果，需要通过运行公式的输出端子𝑐，并赋值𝑎 =2.0, 𝑏 = 4.0才能获得𝑐的数值结果。可以看到，在TensorFlow 中完成简单的2.0 + 4.0尚且如此繁琐，更别说创建复杂的神经网络算法有多艰难，这种先创建计算图后运行的编程方式叫做<strong>符号式编程</strong>。<br>接下来我们使用TensorFlow 2 来完成2.0 + 4.0运算：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> tensorflow <span class="keyword">as</span> tf</span><br><span class="line"><span class="comment"># 1.创建输入张量</span></span><br><span class="line">a = tf.constant(<span class="number">2.</span>)</span><br><span class="line">b = tf.constant(<span class="number">4.</span>)</span><br><span class="line"><span class="comment"># 2.直接计算并打印</span></span><br><span class="line">c = a+b</span><br><span class="line">print(<span class="string">'c='</span>,c)</span><br></pre></td></tr></table></figure>
+
+<p>输出结果是<code>c= tf.Tensor(6.0, shape=(), dtype=float32)</code></p>
+<p>(同样的代码，用tensorflow1.X运行，输出结果是<code>c= Tensor(&quot;add:0&quot;, shape=(), dtype=float32)</code>)</p>
+<p>这种运算时同时创建计算图𝑎 + 𝑏和计算数值结果2.0 + 4.0的方式叫做<strong>命令式编程</strong>，也称为动态图优先模式。TensorFlow 2 和PyTorch 都是采用动态图(优先)模式开发，调试方便，所见即所得。一般来说，动态图模型开发效率高，但是运行效率可能不如静态图模式，TensorFlow 2 也支持通过tf.function 将动态图优先模式的代码转化为静态图模式，实现开发和运行效率双赢。</p>
+<h2 id="框架核心功能"><a href="#框架核心功能" class="headerlink" title="框架核心功能"></a>框架核心功能</h2><p>深度学习的核心是算法的设计思想，深度学习框架只是我们实现算法的工具。下面我们将演示TensorFlow 深度学习框架的3 大核心功能，从而帮助我们理解框架在算法设计中扮演的角色。</p>
+<ul>
+<li>加速计算：神经网络本质上由大量的矩阵相乘，矩阵相加等基本数学运算构成，TensorFlow 的重要功能就是利用GPU 方便地实现并行计算加速功能。</li>
+<li>自动梯度：在使用 TensorFlow 构建前向计算过程的时候，除了能够获得数值结果，TensorFlow 还会自动构建计算图，通过TensorFlow 提供的自动求导的功能，可以不需要手动推导，即可计算出输出对网络的偏导数。</li>
+<li>常用神经网络接口：TensorFlow 除了提供底层的矩阵相乘，相加等运算函数，还内建了常用网络运算函数，常用网络层，网络训练，网络保存与加载，网络部署等一系列深度学习系统的便捷功能。使用TensorFlow 开发网络，可以方便地利用这些功能完成常用业务流程，高效稳定。</li>
+</ul>
+<h2 id="测试环境"><a href="#测试环境" class="headerlink" title="测试环境"></a>测试环境</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> tensorflow <span class="keyword">as</span> tf</span><br><span class="line">print(tf.__version__) <span class="comment">#should be '2.0.0' or '2.0.0-alpha0'</span></span><br><span class="line">tf.test.is_gpu_available() <span class="comment"># True for gpu, False for cpu</span></span><br></pre></td></tr></table></figure>
+
+
         </div>
 
         
@@ -144,22 +231,7 @@
                     </p>
                 
                 
-                    <p class="copyright-item">
-                        <span>Permalink:</span>
-                        <span><a href="https://github.com/zhang-linrui/zhang-linrui.github.io/2019/12/03/tensorflow2-0-绪论/">https://github.com/zhang-linrui/zhang-linrui.github.io/2019/12/03/tensorflow2-0-绪论/</a></span>
-                    </p>
                 
-                
-                    <p class="copyright-item">
-                        <span>License:</span>
-                        <span>Copyright (c) 2019 <a href="http://creativecommons.org/licenses/by-nc/4.0/">CC-BY-NC-4.0</a> LICENSE</span>
-                    </p>
-                
-                
-                     <p class="copyright-item">
-                         <span>Slogan:</span>
-                         <span>Do you believe in <strong>DESTINY<strong>?</strong></strong></span>
-                     </p>
                 
 
             </section>
@@ -178,6 +250,8 @@
             </div>
         </section>
         <section class="post-nav">
+            
+                <a class="prev" rel="prev" href="/2019/12/03/tensorflow2-0-回归/">tensorflow2.0_回归</a>
             
             
             <a class="next" rel="next" href="/2019/12/02/命令行实用技巧/">命令行实用技巧</a>
