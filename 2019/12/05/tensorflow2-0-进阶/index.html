@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta name="generator" content="Hexo 3.9.0">
+    <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <meta name="author" content="Linrui Zhang">
+
+
+
+
+
+<title>tensorflow2.0_进阶 | Zhanglr&#39;s Blog</title>
+
+
+
+    <link rel="icon" href="/favicon.ico">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/js/script.js"></script>
+    
+    <script src="/js/tocbot.min.js"></script>
+    
+
+
+
+    
+    
+        
+    
+
+
+</head>
+<body>
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">Home·主页</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/archives">Posts·文章</a>
+                
+                    <a class="menu-item" href="/category">Categories·分类</a>
+                
+                    <a class="menu-item" href="/about">About·关于我</a>
+                
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
+            </div>
+
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">Home·主页</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/archives">Posts·文章</a>
+                
+                    <a class="menu-item" href="/category">Categories·分类</a>
+                
+                    <a class="menu-item" href="/about">About·关于我</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+        <div class="main">
+            <div class="container">
+    
+    
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">Expand all</a>
+        <a onclick="go_top()">Back to top</a>
+        <a onclick="go_bottom()">Go to bottom</a>
+    </div>
+</div>
+
+<script>
+    document.ready(
+        function () {
+            tocbot.init({
+                tocSelector: '.tocbot-list',
+                contentSelector: '.post-content',
+                headingSelector: 'h1, h2, h3, h4, h5',
+                collapseDepth: 1,
+                orderedList: false,
+                scrollSmooth: true,
+            })
+        }
+    )
+
+    function expand_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 6,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "collapse_toc()");
+        b.innerHTML = "Collapse all"
+    }
+
+    function collapse_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 1,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "expand_toc()");
+        b.innerHTML = "Expand all"
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+</script>
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">tensorflow2.0_进阶</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">Linrui Zhang</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">December 5, 2019&nbsp;&nbsp;13:23:17</a>
+                        </span>
+                    
+                    
+                        <span class="post-category">
+                    Category:
+                            
+                                <a href="/category/tensorflow/">tensorflow</a>
+                            
+                        </span>
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <p>在介绍完张量的基本操作后，我们来进一步学习张量的进阶操作，如张量的合并与分割，范数统计，张量填充，限幅等。</p>
+<h2 id="合并"><a href="#合并" class="headerlink" title="合并"></a>合并</h2><p>合并是指将多个张量在某个维度上合并为一个张量。以某学校班级成绩册数据为例，设张量A 保存了某学校1-4 号班级的成绩册，每个班级35 个学生，共8 门科目，则张量A的shape 为：[4,35,8]；同样的方式，张量B 保存了剩下的6 个班级的成绩册，shape 为[6,35,8]。通过合并2 个成绩册，便可得到学校所有班级的成绩册张量C，shape 应为[10,35,8]。这就是张量合并的意义所在。张量的合并可以使用拼接(Concatenate)和堆叠(Stack)操作实现，拼接并不会产生新的维度，而堆叠会创建新维度。选择使用拼接还是堆叠操作来合并张量，取决于具体的场景是否需要创建新维度。</p>
+<p><strong>拼接</strong>：在TensorFlow 中，可以通过<code>tf.concat(tensors, axis)</code>，其中tensors 保存了所有需要合并的张量List，axis 指定需要合并的维度。回到上面的例子，这里班级维度索引号为0，即axis=0，合并张量A,B 如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">a = tf.random.normal([<span class="number">4</span>,<span class="number">35</span>,<span class="number">8</span>]) <span class="comment"># 模拟成绩册A</span></span><br><span class="line">b = tf.random.normal([<span class="number">6</span>,<span class="number">35</span>,<span class="number">8</span>]) <span class="comment"># 模拟成绩册B</span></span><br><span class="line">tf.concat([a,b],axis=<span class="number">0</span>) <span class="comment"># 合并成绩册 [10,35,8]</span></span><br></pre></td></tr></table></figure>
+
+<p>除了可以在班级维度上进行合并，还可以在其他维度上合并张量。考虑张量A保存了所有班级所有学生的前4 门科目成绩，shape为[10,35,4]，张量B保存了剩下的4 门科目成绩，shape为[10,35,4]，则可以合并shape为[10,35,8]的总成绩册张量:</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">a = tf.random.normal([<span class="number">10</span>,<span class="number">35</span>,<span class="number">4</span>])</span><br><span class="line">b = tf.random.normal([<span class="number">10</span>,<span class="number">35</span>,<span class="number">4</span>])</span><br><span class="line">tf.concat([a,b],axis=<span class="number">2</span>) <span class="comment"># 在科目维度拼接 [10,35,8]</span></span><br></pre></td></tr></table></figure>
+
+<p>合并操作可以在任意的维度上进行，唯一的约束是非合并维度的长度必须一致。比如shape为[4,32,8]和shape 为[6,35,8]的张量则不能直接在班级维度上进行合并，因为学生数维度的长度并不一致，一个为32，另一个为35。</p>
+<p><strong>堆叠</strong>：使用<code>tf.stack(tensors, axis)</code>可以合并多个张量tensors，其中axis 指定插入新维度的位置。tf.concat 直接在现有维度上面合并数据，并不会创建新的维度。如果在合并数据时，希望创建一个新的维度，则需要使用tf.stack 操作。考虑张量A 保存了某个班级的成绩册，shape 为[35,8]，张量B 保存了另一个班级的成绩册，shape 为[35,8]。合并这2个班级的数据时，需要创建一个新维度，定义为班级维度，新维度可以选择放置在任意位置，一般根据大小维度的经验法则，将较大概念的班级维度放置在学生维度之前，则合并后的张量的新shape 应为[2,35,8]。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">a = tf.random.normal([<span class="number">35</span>,<span class="number">8</span>])</span><br><span class="line">b = tf.random.normal([<span class="number">35</span>,<span class="number">8</span>])</span><br><span class="line">tf.stack([a,b],axis=<span class="number">0</span>) <span class="comment"># 堆叠合并为2个班级 [2,35,8]</span></span><br></pre></td></tr></table></figure>
+
+<p>同样可以选择在其他位置插入新维度，如在最末尾插入：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">a = tf.random.normal([<span class="number">35</span>,<span class="number">8</span>])</span><br><span class="line">b = tf.random.normal([<span class="number">35</span>,<span class="number">8</span>])</span><br><span class="line">tf.stack([a,b],axis=<span class="number">-1</span>) <span class="comment"># 在末尾插入班级维度 [35,8,2]</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="分割"><a href="#分割" class="headerlink" title="分割"></a>分割</h2><p>分割是合并的逆过程。<code>tf.split</code>对应<code>tf.concat</code>；<code>tf.unstack</code>对应<code>tf.stack</code></p>
+<p>继续考虑成绩册的例子，我们得到整个学校的成绩册张量，shape 为[10,35,8]，现在需要将数据在班级维度切割为10 个张量，每个张量保存了对应班级的成绩册。</p>
+<p>通过 tf.split(x, axis, num_or_size_splits)可以完成张量的分割操作，其中<br>❑ x：待分割张量<br>❑ axis：分割的维度索引号<br>❑ num_or_size_splits：切割方案</p>
+<p>当num_or_size_splits 为单个数值时，如10，表示切割为10 份；当num_or_size_splits 为List 时，每个元素表示每份的长度，如[2,4,2,2]表示切割为4 份，每份的长度分别为2,4,2,2</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">x = tf.random.normal([<span class="number">10</span>,<span class="number">35</span>,<span class="number">8</span>])</span><br><span class="line">result = tf.split(x,axis=<span class="number">0</span>,num_or_size_splits=<span class="number">10</span>) <span class="comment"># 每个元素shape为[1,35,8]</span></span><br></pre></td></tr></table></figure>
+
+<p>特别地，如果希望在某个维度上全部按长度为1 的方式分割，还可以直接使用tf.unstack(x,axis)。这种方式是tf.split 的一种特殊情况，切割长度固定为1，只需要指定切割维度即可。例如，将总成绩册张量在班级维度进行unstack：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">x = tf.random.normal([<span class="number">10</span>,<span class="number">35</span>,<span class="number">8</span>])</span><br><span class="line">result = tf.unstack(x,axis=<span class="number">0</span>) <span class="comment"># 每个元素shape为[35,8]，班级维度消失了（与split不同）</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="向量范数"><a href="#向量范数" class="headerlink" title="向量范数"></a>向量范数</h2><p>向量范数(Vector norm)是表征向量“长度”的一种度量方法，在神经网络中，常用来表示张量的权值大小，梯度大小等。</p>
+<p>常用的向量范数有：<br>❑ L1 范数，定义为向量𝒙的所有元素绝对值之和</p>
+<p>❑ L2 范数，定义为向量𝒙的所有元素的平方和，再开根号</p>
+<p>❑ ∞ −范数，定义为向量𝒙的所有元素绝对值的最大值</p>
+<p>对于矩阵、张量，同样可以利用向量范数的计算公式，等价于将矩阵、张量打平成向量后计算。</p>
+<p>在 TensorFlow 中，可以通过tf.norm(x, ord)求解张量的L1, L2, ∞等范数，其中参数ord指定为1,2 时计算L1, L2 范数，指定为np.inf 时计算∞ −范数：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">In [<span class="number">13</span>]: x = tf.ones([<span class="number">2</span>,<span class="number">2</span>])</span><br><span class="line">tf.norm(x,ord=<span class="number">1</span>) <span class="comment"># 计算L1 范数</span></span><br><span class="line">Out[<span class="number">13</span>]: &lt;tf.Tensor: id=<span class="number">183</span>, shape=(), dtype=float32, numpy=<span class="number">4.0</span>&gt;</span><br><span class="line">In [<span class="number">14</span>]: tf.norm(x,ord=<span class="number">2</span>) <span class="comment"># 计算L2 范数</span></span><br><span class="line">Out[<span class="number">14</span>]: &lt;tf.Tensor: id=<span class="number">189</span>, shape=(), dtype=float32, numpy=<span class="number">2.0</span>&gt;</span><br><span class="line">In [<span class="number">15</span>]: <span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line">tf.norm(x,ord=np.inf) <span class="comment"># 计算∞范数</span></span><br><span class="line">Out[<span class="number">15</span>]: &lt;tf.Tensor: id=<span class="number">194</span>, shape=(), dtype=float32, numpy=<span class="number">1.0</span>&gt;</span><br></pre></td></tr></table></figure>
+
+<h2 id="最大最小值、均值、和"><a href="#最大最小值、均值、和" class="headerlink" title="最大最小值、均值、和"></a>最大最小值、均值、和</h2><p>通过 <code>tf.reduce_max</code>, <code>tf.reduce_min</code>, <code>tf.reduce_mean</code>, <code>tf.reduce_sum</code> 可以求解张量在某个维度上的最大、最小、均值、和，也可以求全局最大、最小、均值、和信息。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">In [<span class="number">16</span>]: x = tf.random.normal([<span class="number">4</span>,<span class="number">10</span>])</span><br><span class="line">tf.reduce_max(x,axis=<span class="number">1</span>) <span class="comment"># 统计概率维度上的最大值</span></span><br><span class="line">Out[<span class="number">16</span>]:&lt;tf.Tensor: id=<span class="number">203</span>, shape=(<span class="number">4</span>,), dtype=float32,</span><br><span class="line">numpy=array([<span class="number">1.2410722</span> , <span class="number">0.88495886</span>, <span class="number">1.4170984</span> , <span class="number">0.9550192</span> ],dtype=float32&gt;</span><br></pre></td></tr></table></figure>
+
+<p>当不指定axis 参数时，tf.reduce_*函数会求解出全局元素的最大、最小、均值、和。</p>
+<p>在求解误差函数时，通过TensorFlow 的MSE 误差函数可以求得每个样本的误差，需要计算样本的平均误差，此时可以通过tf.reduce_mean 在样本数维度上计算均值：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">out = tf.random.normal([<span class="number">4</span>,<span class="number">10</span>]) <span class="comment"># 网络预测输出</span></span><br><span class="line">y = tf.constant([<span class="number">1</span>,<span class="number">2</span>,<span class="number">2</span>,<span class="number">0</span>]) <span class="comment"># 真实标签</span></span><br><span class="line">y = tf.one_hot(y,depth=<span class="number">10</span>) <span class="comment"># one-hot 编码</span></span><br><span class="line">loss = keras.losses.mse(y,out) <span class="comment"># 计算每个样本的误差</span></span><br><span class="line">loss = tf.reduce_mean(loss) <span class="comment"># 平均误差</span></span><br></pre></td></tr></table></figure>
+
+<p>除了希望获取张量的最值信息，还希望获得最值所在的索引号，例如分类任务的标签预测。考虑10 分类问题，我们得到神经网络的输出张量out，shape 为[2,10]，代表了2 个样本属于10 个类别的概率，由于元素的位置索引代表了当前样本属于此类别的概率，预测时往往会选择概率值最大的元素所在的索引号作为样本类别的预测值：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">out = tf.random.normal([<span class="number">2</span>,<span class="number">10</span>])</span><br><span class="line">out = tf.nn.softmax(out, axis=<span class="number">1</span>) <span class="comment"># 通过softmax 转换为概率值</span></span><br><span class="line">out</span><br><span class="line"><span class="string">'''</span></span><br><span class="line"><span class="string">Out[22]:&lt;tf.Tensor: id=257, shape=(2, 10), dtype=float32, numpy=</span></span><br><span class="line"><span class="string">array([[0.18773547, 0.1510464 , 0.09431915, 0.13652141, 0.06579739,</span></span><br><span class="line"><span class="string">0.02033597, 0.06067333, 0.0666793 , 0.14594753, 0.07094406],</span></span><br><span class="line"><span class="string">[0.5092072 , 0.03887136, 0.0390687 , 0.01911005, 0.03850609,</span></span><br><span class="line"><span class="string">0.03442522, 0.08060656, 0.10171875, 0.08244187, 0.05604421]],</span></span><br><span class="line"><span class="string">dtype=float32)&gt;</span></span><br><span class="line"><span class="string">'''</span></span><br></pre></td></tr></table></figure>
+
+<p>以第一个样本为例，可以看到，它概率最大的索引为𝑖 = 0，最大概率值为0.1877。由于每个索引号上的概率值代表了样本属于此索引号的类别的概率，因此第一个样本属于0类的概率最大，在预测时考虑第一个样本应该最有可能属于类别0。这就是需要求解最大值的索引号的一个典型应用。</p>
+<p>通过 <code>tf.argmax(x, axis)</code>，<code>tf.argmin(x, axis)</code>可以求解在axis 轴上，x 的最大值、最小值所在的索引号：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">red = tf.argmax(out, axis=<span class="number">1</span>) <span class="comment"># 选取概率最大的位置</span></span><br><span class="line">pred</span><br><span class="line"><span class="string">'''</span></span><br><span class="line"><span class="string">Out[23]:&lt;tf.Tensor: id=262, shape=(2,), dtype=int64, numpy=array([0, 0],dtype=int64)&gt;</span></span><br><span class="line"><span class="string">'''</span></span><br></pre></td></tr></table></figure>
+
+<p>可以看到，这2 个样本概率最大值都出现在索引0 上，因此最有可能都是类别0，我们将类别0 作为这2 个样本的预测类别。</p>
+<h2 id="数据限幅"><a href="#数据限幅" class="headerlink" title="数据限幅"></a>数据限幅</h2><p>我们可以使用tf.clip_by_value 实现上下限幅：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">x = tf.range(<span class="number">9</span>)</span><br><span class="line">tf.clip_by_value(x,<span class="number">2</span>,<span class="number">7</span>) <span class="comment"># 限幅为2~7</span></span><br><span class="line"><span class="string">'''</span></span><br><span class="line"><span class="string">Out[36]:&lt;tf.Tensor: id=66, shape=(9,), dtype=int32, numpy=array([2, 2, 2, 3,</span></span><br><span class="line"><span class="string">4, 5, 6, 7, 7])&gt;</span></span><br><span class="line"><span class="string">'''</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="经典数据集加载与训练简介"><a href="#经典数据集加载与训练简介" class="headerlink" title="经典数据集加载与训练简介"></a>经典数据集加载与训练简介</h2><p>到现在为止，我们已经学习完张量的所有常用操作，已具备实现大部分深度网络的技术储备。最后我们将以一个完整的张量方式实现的分类网络模型收尾TensorFlow 框架章节。在进入实战之前，我们先正式介绍对于常用的数据集，如何利用TensorFlow 提供的工具便捷地加载数据集。对于自定义的数据集的加载，我们会在后续章节介绍。<br>在 TensorFlow 中，keras.datasets 模块提供了常用经典数据集的自动下载、管理、加载与转换功能，并且提供了tf.data.Dataset 数据集对象，方便实现多线程(Multi-thread)，预处理(Preprocess)，随机打散(Shuffle)和批训练(Train on batch)等常用数据集功能。</p>
+<p>对于常用的数据集，如：<br>❑ Boston Housing 波士顿房价趋势数据集，用于回归模型训练与测试<br>❑ CIFAR10/100 真实图片数据集，用于图片分类任务<br>❑ MNIST/Fashion_MNIST 手写数字图片数据集，用于图片分类任务<br>❑ IMDB 情感分类任务数据集</p>
+<p>这些数据集在机器学习、深度学习的研究和学习中使用的非常频繁。对于新提出的算法，一般优先在简单的数据集上面测试，再尝试迁移到更大规模、更复杂的数据集上。</p>
+<p>通过 datasets.xxx.load_data()即可实现经典数据集的自动加载，其中xxx 代表具体的数据集名称。TensorFlow 会默认将数据缓存在用户目录下的.keras/datasets 文件夹，用户不需要关心数据集是如何保存的。如果当前数据集不在缓存中，则会自动从网站下载和解压，加载；如果已经在缓存中，自动完成加载：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> tensorflow <span class="keyword">as</span> tf</span><br><span class="line"><span class="keyword">from</span> tensorflow <span class="keyword">import</span> keras</span><br><span class="line"><span class="keyword">from</span> tensorflow.keras <span class="keyword">import</span> datasets <span class="comment"># 导入经典数据集加载模块</span></span><br><span class="line"><span class="comment"># 加载MNIST 数据集</span></span><br><span class="line">(x, y), (x_test, y_test) = datasets.mnist.load_data()</span><br><span class="line">print(<span class="string">'x:'</span>, x.shape, <span class="string">'y:'</span>, y.shape, <span class="string">'x test:'</span>, x_test.shape, <span class="string">'y test:'</span>,y_test)</span><br><span class="line"><span class="string">'''</span></span><br><span class="line"><span class="string">x: (60000, 28, 28) y: (60000,) x test: (10000, 28, 28) y test: [7 2 1 ... 4 5 6]</span></span><br><span class="line"><span class="string">'''</span></span><br></pre></td></tr></table></figure>
+
+<p>通过load_data()会返回相应格式的数据，对于图片数据集MNIST, CIFAR10 等，会返回2个tuple，第一个tuple 保存了用于训练的数据x,y 训练集对象；第2 个tuple 则保存了用于测试的数据x_test,y_test 测试集对象，所有的数据都用Numpy.array 容器承载。</p>
+<p>数据加载进入内存后，需要转换成Dataset 对象，以利用TensorFlow 提供的各种便捷功能。通过Dataset.from_tensor_slices 可以将训练部分的数据图片x 和标签y 都转换成Dataset 对象：<code>train_db = tf.data.Dataset.from_tensor_slices((x, y))</code></p>
+<p>将数据转换成Dataset 对象后，一般需要再添加一系列的数据集标准处理步骤，如随机打散，预处理，按批装载等。</p>
+<h3 id="shuffle"><a href="#shuffle" class="headerlink" title="shuffle"></a>shuffle</h3><p>通过 Dataset.shuffle(buffer_size)工具可以设置Dataset 对象随机打散数据之间的顺序，防止每次训练时数据按固定顺序产生，从而使得模型尝试“记忆”住标签信息：<code>train_db = train_db.shuffle(10000)</code>其中buffer_size 指定缓冲池的大小，一般设置为一个较大的参数即可。</p>
+<h3 id="batch"><a href="#batch" class="headerlink" title="batch"></a>batch</h3><p>为了利用显卡的并行计算能力，一般在网络的计算过程中会同时计算多个样本，我们把这种训练方式叫做批训练，其中样本的数量叫做batch size。为了一次能够从Dataset 中产生 batch size 数量的样本，需要设置Dataset 为批训练方式：<code>train_db = train_db.batch(128)</code></p>
+<p>其中128 为batch size 参数，即一次并行计算128 个样本的数据。Batch size 一般根据用户的GPU 显存资源来设置，当显存不足时，可以适量减少batch size 来减少算法的显存使用量。</p>
+<h3 id="preprocess"><a href="#preprocess" class="headerlink" title="preprocess"></a>preprocess</h3><p>从 keras.datasets 中加载的数据集的格式大部分情况都不能满足模型的输入要求，因此需要根据用户的逻辑自己实现预处理函数。Dataset 对象通过提供map(func)工具函数可以非常方便地调用用户自定义的预处理逻辑，它实现在func 函数里：<code>train_db = train_db.map(preprocess)</code></p>
+<p>考虑 MNIST 手写数字图片，从keras.datasets 中经.batch()后加载的图片x shape 为[𝑏, 28,28]，像素使用0~255 的整形表示；标注shape 为[𝑏]，即采样的数字编码方式。实际的神经网络输入，一般需要将图片数据标准化到[0,1]或[−1,1]等0 附近区间，同时根据网络的设置，需要将shape [28,28] 的输入reshape为合法的格式；对于标注信息，可以选择在预处理时进行one-hot 编码，也可以在计算误差时进行one-hot 编码。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">preprocess</span><span class="params">(x, y)</span>:</span> <span class="comment"># 自定义的预处理函数</span></span><br><span class="line"><span class="comment"># 调用此函数时会自动传入x,y 对象，shape 为[b, 28, 28], [b]</span></span><br><span class="line"><span class="comment"># 标准化到0~1</span></span><br><span class="line">	x = tf.cast(x, dtype=tf.float32) / <span class="number">255.</span></span><br><span class="line">	x = tf.reshape(x, [<span class="number">-1</span>, <span class="number">28</span>*<span class="number">28</span>]) <span class="comment"># 打平</span></span><br><span class="line">	y = tf.cast(y, dtype=tf.int32) <span class="comment"># 转成整形张量</span></span><br><span class="line">	y = tf.one_hot(y, depth=<span class="number">10</span>) <span class="comment"># one-hot 编码</span></span><br><span class="line">	<span class="comment"># 返回的x,y 将替换传入的x,y 参数，从而实现数据的预处理功能</span></span><br><span class="line">	<span class="keyword">return</span> x,y</span><br></pre></td></tr></table></figure>
+
+<h3 id="训练"><a href="#训练" class="headerlink" title="训练"></a>训练</h3><p>我们一般把<strong>完成一个batch 的数据</strong>训练，叫做一个<strong>step</strong>；通过多个step 来<strong>完成整个训练集的一次迭代</strong>，叫做一个<strong>epoch</strong>。在实际训练时，通常需要<br>对数据集迭代多个epoch 才能取得较好地训练效果：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> epoch <span class="keyword">in</span> range(<span class="number">20</span>): <span class="comment"># 训练Epoch 数</span></span><br><span class="line">	<span class="keyword">for</span> step, (x,y) <span class="keyword">in</span> enumerate(train_db): <span class="comment"># 迭代Step 数</span></span><br><span class="line">		<span class="comment"># training...</span></span><br></pre></td></tr></table></figure>
+
+<p>此外，也可以通过设置:<code>train_db = train_db.repeat(20)</code>，使得<code>for x,y in train_db</code> 循环迭代20 个epoch 才会退出。不管使用上述哪种方式，都能取得一样的效果。</p>
+
+        </div>
+
+        
+            <section class="post-copyright">
+                
+                    <p class="copyright-item">
+                        <span>Author:</span>
+                        <span>Linrui Zhang</span>
+                    </p>
+                
+                
+                
+                
+
+            </section>
+        
+        <section class="post-tags">
+            <div>
+                <span>Tag(s):</span>
+                <span class="tag">
+                    
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">back</a>
+                <span>· </span>
+                <a href="/">home</a>
+            </div>
+        </section>
+        <section class="post-nav">
+            
+            
+            <a class="next" rel="next" href="/2019/12/03/tensorflow2-0-基础/">tensorflow2.0_基础</a>
+            
+        </section>
+
+
+    </article>
+</div>
+
+        </div>
+        <footer id="footer" class="footer">
+    <div class="copyright">
+        <span>© Linrui Zhang | Powered by <a href="https://hexo.io" target="_blank">Hexo</a> & <a href="https://github.com/Siricee/hexo-theme-Chic" target="_blank">Chic</a></span>
+    </div>
+</footer>
+
+    </div>
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","model":{"jsonPath":"/live2dw/assets/hijiki.model.json"},"display":{"position":"right","width":200,"height":400},"mobile":{"show":true},"log":false,"tagMode":false});</script></body>
+</html>
