@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta name="generator" content="Hexo 3.9.0">
+    <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <meta name="author" content="Linrui Zhang">
+
+
+
+
+
+<title>Python+lmdb数据库 | Zhanglr&#39;s Blog</title>
+
+
+
+    <link rel="icon" href="/favicon.ico">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/js/script.js"></script>
+    
+    <script src="/js/tocbot.min.js"></script>
+    
+
+
+
+    
+    
+        
+    
+
+
+</head>
+<body>
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">Home·主页</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/archives">Posts·文章</a>
+                
+                    <a class="menu-item" href="/category">Categories·分类</a>
+                
+                    <a class="menu-item" href="/about">About·关于我</a>
+                
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
+            </div>
+
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">Home·主页</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/archives">Posts·文章</a>
+                
+                    <a class="menu-item" href="/category">Categories·分类</a>
+                
+                    <a class="menu-item" href="/about">About·关于我</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+        <div class="main">
+            <div class="container">
+    
+    
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">Expand all</a>
+        <a onclick="go_top()">Back to top</a>
+        <a onclick="go_bottom()">Go to bottom</a>
+    </div>
+</div>
+
+<script>
+    document.ready(
+        function () {
+            tocbot.init({
+                tocSelector: '.tocbot-list',
+                contentSelector: '.post-content',
+                headingSelector: 'h1, h2, h3, h4, h5',
+                collapseDepth: 1,
+                orderedList: false,
+                scrollSmooth: true,
+            })
+        }
+    )
+
+    function expand_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 6,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "collapse_toc()");
+        b.innerHTML = "Collapse all"
+    }
+
+    function collapse_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 1,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "expand_toc()");
+        b.innerHTML = "Expand all"
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+</script>
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">Python+lmdb数据库</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">Linrui Zhang</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">December 17, 2019&nbsp;&nbsp;13:36:38</a>
+                        </span>
+                    
+                    
+                        <span class="post-category">
+                    Category:
+                            
+                                <a href="/category/python/">python</a>
+                            
+                        </span>
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <h2 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h2><p>LMDB和SQLite/MySQL等关系型数据库不同，属于key-value数据库（把LMDB想成dict会比较容易理解），键key与值value都是字符串。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ pip install lmdb</span><br></pre></td></tr></table></figure>
+
+<h2 id="操作"><a href="#操作" class="headerlink" title="操作"></a>操作</h2><p>概况地讲，操作LMDB的流程是：</p>
+<ul>
+<li>通过env = lmdb.open()打开环境</li>
+<li>通过txn = env.begin()建立事务</li>
+<li>通过txn.put(key, value)进行插入和修改</li>
+<li>通过txn.delete(key)进行删除</li>
+<li>通过txn.get(key)进行查询</li>
+<li>通过txn.cursor()进行遍历</li>
+<li>通过txn.commit()提交更改</li>
+</ul>
+<h2 id="例程"><a href="#例程" class="headerlink" title="例程"></a>例程</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#!/usr/bin/env python</span></span><br><span class="line"><span class="keyword">import</span> lmdb</span><br><span class="line">env = lmdb.open(<span class="string">"students"</span>)</span><br><span class="line">env.close()</span><br></pre></td></tr></table></figure>
+
+<p>运行一下，查看当前目录的变化：</p>
+<img src="1.jpg">
+
+<p>可以看到当前目录下多了students目录，里面有data.mdb和lock.mdb两个文件。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> lmdb</span><br><span class="line"></span><br><span class="line">env = lmdb.open(<span class="string">"students"</span>)</span><br><span class="line">txn = env.begin(write=<span class="literal">True</span>)</span><br><span class="line"></span><br><span class="line">txn.put(str(<span class="number">1</span>).encode(), <span class="string">"Alice"</span>.encode())</span><br><span class="line">txn.put(str(<span class="number">2</span>).encode(), <span class="string">"Bob"</span>.encode())</span><br><span class="line">txn.put(str(<span class="number">3</span>).encode(), <span class="string">"Peter"</span>.encode())</span><br><span class="line"></span><br><span class="line">txn.delete(str(<span class="number">1</span>).encode())</span><br><span class="line"></span><br><span class="line">txn.put(str(<span class="number">3</span>).encode(), <span class="string">"Mark"</span>.encode())</span><br><span class="line"></span><br><span class="line">txn.commit()</span><br><span class="line">env.close()</span><br></pre></td></tr></table></figure>
+
+<p>插入与修改都用put实现，删除用delete实现。注意用<code>txn = env.begin()</code>创建事务时，只有<code>write=True</code>才能够写数据库。一定要<code>txn.commit()</code>提交更改！！！一定要<code>txn.commit()</code>提交更改！！！一定要<code>txn.commit()</code>提交更改！！！</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> lmdb</span><br><span class="line">env = lmdb.open(<span class="string">"students"</span>)</span><br><span class="line"><span class="comment"># txn = env.begin(write=True)</span></span><br><span class="line">txn = env.begin()</span><br><span class="line"><span class="keyword">print</span> txn.get(str(<span class="number">2</span>).encode())</span><br><span class="line"><span class="keyword">for</span> key, value <span class="keyword">in</span> txn.cursor():</span><br><span class="line">    <span class="keyword">print</span> (key.decode(<span class="string">'utf-8'</span>), value.decode(<span class="string">'utf-8'</span>))</span><br><span class="line">env.close()</span><br></pre></td></tr></table></figure>
+
+<p>查单条记录用<code>get(key)</code>，遍历数据库用cursor。</p>
+
+        </div>
+
+        
+            <section class="post-copyright">
+                
+                    <p class="copyright-item">
+                        <span>Author:</span>
+                        <span>Linrui Zhang</span>
+                    </p>
+                
+                
+                
+                
+
+            </section>
+        
+        <section class="post-tags">
+            <div>
+                <span>Tag(s):</span>
+                <span class="tag">
+                    
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">back</a>
+                <span>· </span>
+                <a href="/">home</a>
+            </div>
+        </section>
+        <section class="post-nav">
+            
+                <a class="prev" rel="prev" href="/2019/12/17/Python-Excel读写/">Python+Excel读写</a>
+            
+            
+            <a class="next" rel="next" href="/2019/12/05/tensorflow2-0-keras/">tensorflow2.0_keras</a>
+            
+        </section>
+
+
+    </article>
+</div>
+
+        </div>
+        <footer id="footer" class="footer">
+    <div class="copyright">
+        <span>© Linrui Zhang | Powered by <a href="https://hexo.io" target="_blank">Hexo</a> & <a href="https://github.com/Siricee/hexo-theme-Chic" target="_blank">Chic</a></span>
+    </div>
+</footer>
+
+    </div>
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","model":{"jsonPath":"/live2dw/assets/hijiki.model.json"},"display":{"position":"right","width":200,"height":400},"mobile":{"show":true},"log":false,"tagMode":false});</script></body>
+</html>
