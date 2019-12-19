@@ -1342,13 +1342,6 @@ header label {
 .post-content pre .javascript .function {
   color: #8959a8;
 }
-body {
-  background: url("/image/bg.jpg");
-  background-size: cover;
-  background-repeat: no-repeat;
-  background-attachment: fixed;
-  background-position: center;
-}
 * {
   cursor: url("/image/c1.ico"), auto !important;
 }

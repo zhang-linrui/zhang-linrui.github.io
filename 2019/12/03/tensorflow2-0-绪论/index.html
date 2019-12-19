@@ -217,6 +217,7 @@
 <li>自动梯度：在使用 TensorFlow 构建前向计算过程的时候，除了能够获得数值结果，TensorFlow 还会自动构建计算图，通过TensorFlow 提供的自动求导的功能，可以不需要手动推导，即可计算出输出对网络的偏导数。</li>
 <li>常用神经网络接口：TensorFlow 除了提供底层的矩阵相乘，相加等运算函数，还内建了常用网络运算函数，常用网络层，网络训练，网络保存与加载，网络部署等一系列深度学习系统的便捷功能。使用TensorFlow 开发网络，可以方便地利用这些功能完成常用业务流程，高效稳定。</li>
 </ul>
+<h2 id="安装环境"><a href="#安装环境" class="headerlink" title="安装环境"></a>安装环境</h2><p><a href="https://zhuanlan.zhihu.com/p/84940320" target="_blank" rel="noopener">https://zhuanlan.zhihu.com/p/84940320</a></p>
 <h2 id="测试环境"><a href="#测试环境" class="headerlink" title="测试环境"></a>测试环境</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> tensorflow <span class="keyword">as</span> tf</span><br><span class="line">print(tf.__version__) <span class="comment">#should be '2.0.0' or '2.0.0-alpha0'</span></span><br><span class="line">tf.test.is_gpu_available() <span class="comment"># True for gpu, False for cpu</span></span><br></pre></td></tr></table></figure>
 
 
