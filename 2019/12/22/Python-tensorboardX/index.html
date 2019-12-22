@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta name="generator" content="Hexo 3.9.0">
+    <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <meta name="author" content="Linrui Zhang">
+
+
+
+
+
+<title>Python+tensorboardX | Zhanglr&#39;s Blog</title>
+
+
+
+    <link rel="icon" href="/favicon.ico">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/js/script.js"></script>
+    
+    <script src="/js/tocbot.min.js"></script>
+    
+
+
+
+    
+    
+        
+    
+
+
+</head>
+<body>
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">Home·主页</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/archives">Posts·文章</a>
+                
+                    <a class="menu-item" href="/category">Categories·分类</a>
+                
+                    <a class="menu-item" href="/about">About·关于我</a>
+                
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
+            </div>
+
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">Home·主页</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/archives">Posts·文章</a>
+                
+                    <a class="menu-item" href="/category">Categories·分类</a>
+                
+                    <a class="menu-item" href="/about">About·关于我</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+        <div class="main">
+            <div class="container">
+    
+    
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">Expand all</a>
+        <a onclick="go_top()">Back to top</a>
+        <a onclick="go_bottom()">Go to bottom</a>
+    </div>
+</div>
+
+<script>
+    document.ready(
+        function () {
+            tocbot.init({
+                tocSelector: '.tocbot-list',
+                contentSelector: '.post-content',
+                headingSelector: 'h1, h2, h3, h4, h5',
+                collapseDepth: 1,
+                orderedList: false,
+                scrollSmooth: true,
+            })
+        }
+    )
+
+    function expand_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 6,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "collapse_toc()");
+        b.innerHTML = "Collapse all"
+    }
+
+    function collapse_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 1,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "expand_toc()");
+        b.innerHTML = "Expand all"
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+</script>
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">Python+tensorboardX</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">Linrui Zhang</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">December 22, 2019&nbsp;&nbsp;14:10:42</a>
+                        </span>
+                    
+                    
+                        <span class="post-category">
+                    Category:
+                            
+                                <a href="/category/python/">python</a>
+                            
+                        </span>
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <h2 id="tensorboard-X是什么？"><a href="#tensorboard-X是什么？" class="headerlink" title="tensorboard X是什么？"></a>tensorboard X是什么？</h2><p>最开始，作者为它取名为tensorboard-pytorch，顾名思义就是为了能在pytorch框架下使用tensorboard，但为了使其更通用，作者最终选择了tensorboardX这个名字，它表示X的tensorboard。甚至tensorflow的使用者有时也会更倾向于使用tensorboardX。该软件包当前支持记录<strong>标量</strong>，<strong>图像</strong>，<strong>音频</strong>，<strong>直方图</strong>，<strong>文本</strong>，<strong>词嵌入</strong>以及<strong>反向传播路线</strong>等。</p>
+<h2 id="如何在windows下访问tensorboard"><a href="#如何在windows下访问tensorboard" class="headerlink" title="如何在windows下访问tensorboard?"></a>如何在windows下访问tensorboard?</h2><p>首先碰到在cmd下不能使用tensorboard命令的  看看是否添加了环境变量</p>
+<p>其次就是不能用tensorboard –logdir= log存放的文件目录 获取到的网址在chrome中无法连接的问题</p>
+<p>修改命令为 tensorboard –logdir =log存放的目录 –host=127.0.0.1</p>
+<p>执行完后再访问<a href="http://127.0.0.1:6006" target="_blank" rel="noopener">http://127.0.0.1:6006</a> 就可以了</p>
+<h2 id="创建一个summary-writer"><a href="#创建一个summary-writer" class="headerlink" title="创建一个summary writer"></a>创建一个summary writer</h2><p>在记录任何内容之前，我们需要创建一个writer实例。这可以通过以下方式完成：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> tensorboardX <span class="keyword">import</span> SummaryWriter</span><br><span class="line"><span class="comment">#SummaryWriter封装了所有内容，故只需实例化SummaryWriter即可</span></span><br><span class="line">writer = SummaryWriter(<span class="string">'runs/exp-1'</span>)</span><br><span class="line"><span class="comment">#creates writer object. The log will be saved in 'runs/exp-1'</span></span><br><span class="line">writer2 = SummaryWriter()</span><br><span class="line"><span class="comment">#creates writer2 object with auto generated file name, the dir will be something like 'runs/Aug20-17-20-33'</span></span><br><span class="line">writer3 = SummaryWriter(comment=<span class="string">'3x learning rate'</span>)</span><br><span class="line"><span class="comment">#creates writer3 object with auto generated file name, the comment will be appended to the filename. The dir will be something like 'runs/Aug20-17-20-33-3xlearning rate'</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="记录标量-Add-scalar"><a href="#记录标量-Add-scalar" class="headerlink" title="记录标量 Add scalar"></a>记录标量 Add scalar</h2><p>标量值是最简单的数据类型。通常我们是保存每个训练步骤的损失值或每个epoch后的准确性。有时我也会保存相应的学习率。</p>
+<p>使用<code>writer.add_scalar(&#39;myscalar&#39;, value, global_step)</code>来log一个标量。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">fake_epoches = [<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>]</span><br><span class="line">fake_acc = [<span class="number">0.55</span>,<span class="number">0.68</span>,<span class="number">0.77</span>,<span class="number">0.79</span>,<span class="number">0.81</span>,<span class="number">0.82</span>]</span><br><span class="line"><span class="keyword">for</span> acc,epoch <span class="keyword">in</span> zip(fake_acc,fake_epoches):</span><br><span class="line">    print(acc,epoch)</span><br><span class="line">    writer.add_scalar(<span class="string">'fack_accuracy'</span>, acc, epoch)</span><br></pre></td></tr></table></figure>
+
+<img src="1.JPG" width="500">
+
+<h2 id="记录多个标量-Add-scalars"><a href="#记录多个标量-Add-scalars" class="headerlink" title="记录多个标量 Add scalars"></a>记录多个标量 Add scalars</h2><p>使用<code>writer.add_scalars(&#39;myscalars&#39;, scalar_dict, global_step)</code>来log一个标量。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">r = <span class="number">5</span></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">100</span>):</span><br><span class="line">    writer.add_scalars(<span class="string">'run_14h'</span>, &#123;<span class="string">'xsinx'</span>:i*np.sin(i/r),</span><br><span class="line">                                    <span class="string">'xcosx'</span>:i*np.cos(i/r),</span><br><span class="line">                                    <span class="string">'tanx'</span>: np.tan(i/r)&#125;, i)</span><br></pre></td></tr></table></figure>
+
+<img src="2.JPG" width="500">
+
+<h2 id="记录图像-Add-image"><a href="#记录图像-Add-image" class="headerlink" title="记录图像 Add image"></a>记录图像 Add image</h2><p>使用<code>add_image(&#39;myimage&#39;,img_tensor,global_step=None,dataformats=&#39;CHW&#39;)</code>来log图像。</p>
+<p>Tensor with (1,H,W)(1,H,W), (H,W)(H,W), (H,W,3)(H,W,3) is also suitible as long as corresponding <code>dataformats</code> argument is passed. e.g. CHW, HWC, HW.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">img = np.zeros((<span class="number">3</span>, <span class="number">100</span>, <span class="number">100</span>))</span><br><span class="line">img[<span class="number">0</span>] = np.arange(<span class="number">0</span>, <span class="number">10000</span>).reshape(<span class="number">100</span>, <span class="number">100</span>) / <span class="number">10000</span></span><br><span class="line">img[<span class="number">1</span>] = <span class="number">1</span> - np.arange(<span class="number">0</span>, <span class="number">10000</span>).reshape(<span class="number">100</span>, <span class="number">100</span>) / <span class="number">10000</span></span><br><span class="line"></span><br><span class="line">img_HWC = np.zeros((<span class="number">100</span>, <span class="number">100</span>, <span class="number">3</span>))</span><br><span class="line">img_HWC[:, :, <span class="number">0</span>] = np.arange(<span class="number">0</span>, <span class="number">10000</span>).reshape(<span class="number">100</span>, <span class="number">100</span>) / <span class="number">10000</span></span><br><span class="line">img_HWC[:, :, <span class="number">1</span>] = <span class="number">1</span> - np.arange(<span class="number">0</span>, <span class="number">10000</span>).reshape(<span class="number">100</span>, <span class="number">100</span>) / <span class="number">10000</span></span><br><span class="line"></span><br><span class="line">writer = SummaryWriter()</span><br><span class="line">writer.add_image(<span class="string">'my_image'</span>, img, <span class="number">0</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># If you have non-default dimension setting, set the dataformats argument.</span></span><br><span class="line"><span class="comment"># 如果你的输入不是默认的CHW格式，你需要显式指定。</span></span><br><span class="line">writer.add_image(<span class="string">'my_image_HWC'</span>, img_HWC, <span class="number">0</span>, dataformats=<span class="string">'HWC'</span>)</span><br></pre></td></tr></table></figure>
+
+<img src="3.JPG" width="500">
+
+<h2 id="刷新-flush"><a href="#刷新-flush" class="headerlink" title="刷新 flush"></a>刷新 flush</h2><p>强制将内存中的数据刷新到磁盘。如果tensorboard不能正常更新，请使用此调用。另一种方法是在创建SummaryWriter时设置flush_secs。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">writer.flush()</span><br></pre></td></tr></table></figure>
+
+<h2 id="关闭-close"><a href="#关闭-close" class="headerlink" title="关闭 close"></a>关闭 close</h2><p>关闭当前的SummaryWriter。此调用将刷新未完成的写操作。尽可能使用上下文管理器（with语句）。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">writer.close()</span><br></pre></td></tr></table></figure>
+
+
+        </div>
+
+        
+            <section class="post-copyright">
+                
+                    <p class="copyright-item">
+                        <span>Author:</span>
+                        <span>Linrui Zhang</span>
+                    </p>
+                
+                
+                
+                
+
+            </section>
+        
+        <section class="post-tags">
+            <div>
+                <span>Tag(s):</span>
+                <span class="tag">
+                    
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">back</a>
+                <span>· </span>
+                <a href="/">home</a>
+            </div>
+        </section>
+        <section class="post-nav">
+            
+            
+            <a class="next" rel="next" href="/2019/12/20/Python-PIL/">Python+PIL</a>
+            
+        </section>
+
+
+    </article>
+</div>
+
+        </div>
+        <footer id="footer" class="footer">
+    <div class="copyright">
+        <span>© Linrui Zhang | Powered by <a href="https://hexo.io" target="_blank">Hexo</a> & <a href="https://github.com/Siricee/hexo-theme-Chic" target="_blank">Chic</a></span>
+    </div>
+</footer>
+
+    </div>
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","model":{"jsonPath":"/live2dw/assets/hijiki.model.json"},"display":{"position":"right","width":200,"height":400},"mobile":{"show":true},"log":false,"tagMode":false});</script></body>
+</html>

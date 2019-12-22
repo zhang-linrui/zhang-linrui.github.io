@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta name="generator" content="Hexo 3.9.0">
+    <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <meta name="author" content="Linrui Zhang">
+
+
+
+
+
+<title>Python+PIL | Zhanglr&#39;s Blog</title>
+
+
+
+    <link rel="icon" href="/favicon.ico">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/js/script.js"></script>
+    
+    <script src="/js/tocbot.min.js"></script>
+    
+
+
+
+    
+    
+        
+    
+
+
+</head>
+<body>
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">Home·主页</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/archives">Posts·文章</a>
+                
+                    <a class="menu-item" href="/category">Categories·分类</a>
+                
+                    <a class="menu-item" href="/about">About·关于我</a>
+                
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
+            </div>
+
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">Home·主页</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/archives">Posts·文章</a>
+                
+                    <a class="menu-item" href="/category">Categories·分类</a>
+                
+                    <a class="menu-item" href="/about">About·关于我</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+        <div class="main">
+            <div class="container">
+    
+    
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">Expand all</a>
+        <a onclick="go_top()">Back to top</a>
+        <a onclick="go_bottom()">Go to bottom</a>
+    </div>
+</div>
+
+<script>
+    document.ready(
+        function () {
+            tocbot.init({
+                tocSelector: '.tocbot-list',
+                contentSelector: '.post-content',
+                headingSelector: 'h1, h2, h3, h4, h5',
+                collapseDepth: 1,
+                orderedList: false,
+                scrollSmooth: true,
+            })
+        }
+    )
+
+    function expand_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 6,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "collapse_toc()");
+        b.innerHTML = "Collapse all"
+    }
+
+    function collapse_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 1,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "expand_toc()");
+        b.innerHTML = "Expand all"
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+</script>
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">Python+PIL</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">Linrui Zhang</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">December 20, 2019&nbsp;&nbsp;15:52:56</a>
+                        </span>
+                    
+                    
+                        <span class="post-category">
+                    Category:
+                            
+                                <a href="/category/python/">python</a>
+                            
+                        </span>
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <h2 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h2><p>PIL (Python Image Library) 是 Python 平台处理图片的事实标准，兼具强大的功能和简洁的 API。虽然本篇介绍的是 PIL，但实际上安装的却是 Pillow。PIL 的更新速度很慢，而且存在一些难以配置的问题，不推荐使用；而 Pillow 库则是 PIL 的一个分支，维护和开发活跃，Pillow 兼容 PIL 的绝大多数语法，推荐使用。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ pip install Pillow</span><br></pre></td></tr></table></figure>
+
+<img src="1.JPG">
+
+<h2 id="入门"><a href="#入门" class="headerlink" title="入门"></a>入门</h2><p>PIL 的主要功能定义在 <code>Image</code> 类当中，而 <code>Image</code> 类定义在同名的 <code>Image</code> 模块当中。使用 PIL 的功能，一般都是从新建一个 <code>Image</code> 类的实例开始。新建 <code>Image</code> 类的实例有多种方法。你可以用 <code>Image</code> 模块的 <code>open()</code> 函数打开已有的图片档案，也可以处理其它的实例，或者从零开始构建一个实例。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> PIL <span class="keyword">import</span> Image</span><br><span class="line">img = Image.open(<span class="string">'test.jpg'</span>)</span><br><span class="line">img.show() <span class="comment"># PIL会将实例暂存为一个临时文件，而后用默认图片浏览器打开它</span></span><br></pre></td></tr></table></figure>
+
+<img src="2.JPG">
+
+<p><code>Image</code> 类的实例有 5 个属性，有3个能用上，分别是：</p>
+<ul>
+<li><code>format</code>: 以 <code>string</code> 返回图片档案的格式（<code>JPG</code>, <code>PNG</code>, <code>BMP</code>, <code>None</code>, etc.）；如果不是从打开文件得到的实例，则返回 <code>None</code>。</li>
+<li><code>mode</code>: 以 <code>string</code> 返回图片的模式（<code>RGB</code>,<code>CMYK</code>, etc.）；完整的列表参见 <a href="http://effbot.org/imagingbook/concepts.htm#mode" target="_blank" rel="noopener">官方说明·图片模式列表</a></li>
+<li><code>size</code>: 以二元 tuple 返回图片档案的尺寸 (width, height)</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">print(img.format) <span class="comment"># JPG</span></span><br><span class="line">print(img.mode) <span class="comment"># P 上面那个图不是rgb,而是P模式，位深度不是24，而是8</span></span><br><span class="line">print(img.size) <span class="comment"># (255,255)</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="图片-IO-转换图片格式"><a href="#图片-IO-转换图片格式" class="headerlink" title="图片 IO - 转换图片格式"></a>图片 IO - 转换图片格式</h3><p><code>Image</code> 模块提供了 <code>open()</code> 函数打开图片档案，<code>Image</code> 类则提供了 <code>save()</code> 方法将图片实例保存为图片档案。</p>
+<p><code>save()</code> 函数可以以特定的图片格式保存图片档案。比如 <code>save(&#39;target.jpg&#39;, &#39;JPG&#39;)</code> 将会以 <code>JPG</code> 格式将图片示例保存为 <code>target.jpg</code>。不过，大多数时候也可以省略图片格式。此时，<code>save()</code> 方法会根据文件扩展名来选择相应的图片格式。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># .png 转 .jpg</span></span><br><span class="line"><span class="keyword">import</span> os, sys</span><br><span class="line"><span class="keyword">from</span> PIL <span class="keyword">import</span> Image</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> infile <span class="keyword">in</span> sys.argv[<span class="number">1</span>:]:</span><br><span class="line">    f, e = os.path.splitext(infile)</span><br><span class="line">    outfile = f + <span class="string">".jpg"</span></span><br><span class="line">    <span class="keyword">if</span> infile != outfile:</span><br><span class="line">        <span class="keyword">try</span>:</span><br><span class="line">            Image.open(infile).save(outfile,<span class="string">'JPG'</span>)</span><br><span class="line">        <span class="keyword">except</span> IOError:</span><br><span class="line">            <span class="keyword">print</span> <span class="string">"cannot convert"</span>, infile</span><br></pre></td></tr></table></figure>
+
+<h2 id="图片剪裁"><a href="#图片剪裁" class="headerlink" title="图片剪裁"></a>图片剪裁</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">box = (<span class="number">0</span>, <span class="number">0</span>, <span class="number">255</span>/<span class="number">2</span>, <span class="number">255</span>) <span class="comment"># (xmin,ymin,xmax,ymax)</span></span><br><span class="line">roi = img.crop(box)</span><br><span class="line">roi.show()</span><br></pre></td></tr></table></figure>
+
+<h2 id="图片几何变换"><a href="#图片几何变换" class="headerlink" title="图片几何变换"></a>图片几何变换</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">out = img.resize((<span class="number">128</span>, <span class="number">128</span>)) <span class="comment"># (w,h)</span></span><br><span class="line">out = img.rotate(<span class="number">45</span>) <span class="comment"># 逆时针方向算正</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="图片翻转"><a href="#图片翻转" class="headerlink" title="图片翻转"></a>图片翻转</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">out = img.transpose(Image.FLIP_LEFT_RIGHT) <span class="comment"># 左右翻转</span></span><br><span class="line">out = img.transpose(Image.FLIP_TOP_BOTTOM) <span class="comment"># 上下翻转</span></span><br><span class="line">out = img.transpose(Image.ROTATE_90)</span><br><span class="line">out = img.transpose(Image.ROTATE_180)</span><br><span class="line">out = img.transpose(Image.ROTATE_270)</span><br></pre></td></tr></table></figure>
+
+<img src="3.JPG">
+
+<h2 id="图片模式转换"><a href="#图片模式转换" class="headerlink" title="图片模式转换"></a>图片模式转换</h2><ul>
+<li><strong>1</strong> (1-bit pixels, black and white, stored with one pixel per byte)</li>
+<li><strong>L</strong> (8-bit pixels, black and white)</li>
+<li><strong>RGB</strong> (3x8-bit pixels, true colour)</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">converted = img.convert(<span class="string">"L"</span>) <span class="comment"># 灰度模式</span></span><br></pre></td></tr></table></figure>
+
+<img src="4.JPG">
+
+<h2 id="OpenCV转PIL"><a href="#OpenCV转PIL" class="headerlink" title="OpenCV转PIL"></a>OpenCV转PIL</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> cv2</span><br><span class="line"><span class="keyword">from</span> PIL <span class="keyword">import</span> Image </span><br><span class="line"><span class="keyword">import</span> numpy </span><br><span class="line">img = cv2.imread(<span class="string">"test.jpg"</span>)</span><br><span class="line"><span class="comment"># 一定要注意cv2是BGR格式，而PIL是RGB</span></span><br><span class="line">image = Image.fromarray(cv2.cvtColor(img,cv2.COLOR_BGR2RGB))  </span><br><span class="line">image.show()</span><br></pre></td></tr></table></figure>
+
+<h2 id="PIL转OpenCV"><a href="#PIL转OpenCV" class="headerlink" title="PIL转OpenCV"></a>PIL转OpenCV</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> cv2  </span><br><span class="line"><span class="keyword">from</span> PIL <span class="keyword">import</span> Image  </span><br><span class="line"><span class="keyword">import</span> numpy  </span><br><span class="line">image = Image.open(<span class="string">"test.jpg"</span>)</span><br><span class="line">img = cv2.cvtColor(numpy.asarray(image),cv2.COLOR_RGB2BGR)  </span><br><span class="line">cv2.imshow(<span class="string">"OpenCV"</span>,img)  </span><br><span class="line">cv2.waitKey()</span><br></pre></td></tr></table></figure>
+
+<h2 id="更详尽的官方文档："><a href="#更详尽的官方文档：" class="headerlink" title="更详尽的官方文档："></a>更详尽的官方文档：</h2><p><a href="https://pillow-zh-cn.readthedocs.io/zh_CN/latest/handbook/tutorial.html" target="_blank" rel="noopener">https://pillow-zh-cn.readthedocs.io/zh_CN/latest/handbook/tutorial.html</a></p>
+
+        </div>
+
+        
+            <section class="post-copyright">
+                
+                    <p class="copyright-item">
+                        <span>Author:</span>
+                        <span>Linrui Zhang</span>
+                    </p>
+                
+                
+                
+                
+
+            </section>
+        
+        <section class="post-tags">
+            <div>
+                <span>Tag(s):</span>
+                <span class="tag">
+                    
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">back</a>
+                <span>· </span>
+                <a href="/">home</a>
+            </div>
+        </section>
+        <section class="post-nav">
+            
+                <a class="prev" rel="prev" href="/2019/12/22/Python-tensorboardX/">Python+tensorboardX</a>
+            
+            
+            <a class="next" rel="next" href="/2019/12/19/Python-tensorrt/">Python+tensorrt</a>
+            
+        </section>
+
+
+    </article>
+</div>
+
+        </div>
+        <footer id="footer" class="footer">
+    <div class="copyright">
+        <span>© Linrui Zhang | Powered by <a href="https://hexo.io" target="_blank">Hexo</a> & <a href="https://github.com/Siricee/hexo-theme-Chic" target="_blank">Chic</a></span>
+    </div>
+</footer>
+
+    </div>
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","model":{"jsonPath":"/live2dw/assets/hijiki.model.json"},"display":{"position":"right","width":200,"height":400},"mobile":{"show":true},"log":false,"tagMode":false});</script></body>
+</html>
