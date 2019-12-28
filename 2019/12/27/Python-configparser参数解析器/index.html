@@ -11,7 +11,7 @@
 
 
 
-<title>命令行实用技巧 | Zhanglr&#39;s Blog</title>
+<title>Python+configparser参数解析器 | Zhanglr&#39;s Blog</title>
 
 
 
@@ -169,7 +169,7 @@
     
     <article class="post-wrap">
         <header class="post-header">
-            <h1 class="post-title">命令行实用技巧</h1>
+            <h1 class="post-title">Python+configparser参数解析器</h1>
             
                 <div class="post-meta">
                     
@@ -178,26 +178,31 @@
 
                     
                         <span class="post-time">
-                        Date: <a href="#">December 2, 2019&nbsp;&nbsp;16:08:31</a>
+                        Date: <a href="#">December 27, 2019&nbsp;&nbsp;22:08:53</a>
                         </span>
                     
+                    
+                        <span class="post-category">
+                    Category:
+                            
+                                <a href="/category/python/">python</a>
+                            
+                        </span>
                     
                 </div>
             
         </header>
 
         <div class="post-content">
-            <h2 id="pip"><a href="#pip" class="headerlink" title="pip"></a>pip</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ pip install 安装包名</span><br><span class="line">$ pip install --upgrade 要升级的包名</span><br><span class="line">$ pip uninstall 要卸载的包名</span><br></pre></td></tr></table></figure>
+            <h2 id="目录结构"><a href="#目录结构" class="headerlink" title="目录结构"></a>目录结构</h2><p>我们要定义一个<code>config.ini</code>文件，放我们需要的配置参数，然后写一个<code>getConfig.py</code>模块定义解析配置参数的函数<code>getConfig()</code></p>
+<img src="1.JPG">
 
-<h2 id="mv"><a href="#mv" class="headerlink" title="mv"></a>mv</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ mv XXX* YYY/ <span class="comment"># 复制XXX开头的若干文件到YYY目录下</span></span><br></pre></td></tr></table></figure>
+<h2 id="文件详解-getConfig-py"><a href="#文件详解-getConfig-py" class="headerlink" title="文件详解-getConfig.py"></a>文件详解-getConfig.py</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># coding=utf-8</span></span><br><span class="line"><span class="keyword">import</span> configparser</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">str2bool</span><span class="params">(v)</span>:</span></span><br><span class="line">  <span class="keyword">return</span> v.lower() <span class="keyword">in</span> (<span class="string">"yes"</span>, <span class="string">"true"</span>, <span class="string">"t"</span>, <span class="string">"1"</span>)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">getConfig</span><span class="params">(configFile=<span class="string">'config.ini'</span>)</span>:</span></span><br><span class="line">	parser = configparser.ConfigParser()</span><br><span class="line">	parser.read(configFile)</span><br><span class="line">	_conf_ints = [(key,int(value)) <span class="keyword">for</span> key,value <span class="keyword">in</span> parser.items(<span class="string">'ints'</span>)]</span><br><span class="line">	_conf_floats = [(key,float(value)) <span class="keyword">for</span> key,value <span class="keyword">in</span> parser.items(<span class="string">'floats'</span>)]</span><br><span class="line">	_conf_strings = [(key,str(value)) <span class="keyword">for</span> key,value <span class="keyword">in</span> parser.items(<span class="string">'strings'</span>)]</span><br><span class="line">	_conf_booleans = [(key,str2bool(value)) <span class="keyword">for</span> key,value <span class="keyword">in</span> parser.items(<span class="string">'booleans'</span>)]</span><br><span class="line">	<span class="keyword">return</span> dict(_conf_ints+_conf_floats+_conf_strings+_conf_booleans)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">	params = getConfig()</span><br><span class="line">	print(params)</span><br></pre></td></tr></table></figure>
 
-<h2 id="conda"><a href="#conda" class="headerlink" title="conda"></a>conda</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">$ conda create -n py3 python=3.6 <span class="comment"># 创建环境py3</span></span><br><span class="line">$ conda activate py3 <span class="comment"># 激活环境py3</span></span><br><span class="line">$ conda deactivate <span class="comment"># 关闭环境</span></span><br><span class="line">$ conda info --envs <span class="comment"># 查询环境信息 == conda env list</span></span><br></pre></td></tr></table></figure>
+<h2 id="文件详解-config-ini"><a href="#文件详解-config-ini" class="headerlink" title="文件详解-config.ini"></a>文件详解-config.ini</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">[ints]</span><br><span class="line">a_int = 0</span><br><span class="line"></span><br><span class="line">[floats]</span><br><span class="line">a_float = 0.5</span><br><span class="line"></span><br><span class="line">[strings]</span><br><span class="line">a_str = /mnt/proj/</span><br><span class="line"></span><br><span class="line">[booleans]</span><br><span class="line">a_bool = True</span><br></pre></td></tr></table></figure>
 
-<h2 id="bashrc"><a href="#bashrc" class="headerlink" title=".bashrc"></a>.bashrc</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ vim ~/.bashrc <span class="comment"># 修改</span></span><br><span class="line">$ <span class="built_in">source</span> ~/.bashrc <span class="comment"># 生效</span></span><br></pre></td></tr></table></figure>
-
-<h2 id="tree"><a href="#tree" class="headerlink" title="tree"></a>tree</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ tree <span class="comment"># 树状展示目录 sudo apt install tree</span></span><br></pre></td></tr></table></figure>
-
-
+<h2 id="如何使用"><a href="#如何使用" class="headerlink" title="如何使用"></a>如何使用</h2><p>使用时，我们从主文件中可以调用<code>getConfig()</code>去完成解析，将配置参数转换为一个字典结构，便于主程序使用我们的配置参数。</p>
+<img src="2.JPG">
         </div>
 
         
@@ -229,10 +234,8 @@
         </section>
         <section class="post-nav">
             
-                <a class="prev" rel="prev" href="/2019/12/03/tensorflow2-0-绪论/">tensorflow2.0_绪论</a>
             
-            
-            <a class="next" rel="next" href="/2019/10/12/hello-world/">Hello World</a>
+            <a class="next" rel="next" href="/2019/12/22/Python-tensorboardX/">Python+tensorboardX</a>
             
         </section>
 
