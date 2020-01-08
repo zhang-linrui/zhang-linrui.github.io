@@ -11,7 +11,7 @@
 
 
 
-<title>Python+configparser参数解析器 | Zhanglr&#39;s Blog</title>
+<title>CoppeliaSim+返回值常量与模式 | Zhanglr&#39;s Blog</title>
 
 
 
@@ -169,7 +169,7 @@
     
     <article class="post-wrap">
         <header class="post-header">
-            <h1 class="post-title">Python+configparser参数解析器</h1>
+            <h1 class="post-title">CoppeliaSim+返回值常量与模式</h1>
             
                 <div class="post-meta">
                     
@@ -178,31 +178,96 @@
 
                     
                         <span class="post-time">
-                        Date: <a href="#">December 27, 2019&nbsp;&nbsp;22:08:53</a>
+                        Date: <a href="#">December 31, 2019&nbsp;&nbsp;12:29:52</a>
                         </span>
                     
-                    
-                        <span class="post-category">
-                    Category:
-                            
-                                <a href="/category/python/">python</a>
-                            
-                        </span>
                     
                 </div>
             
         </header>
 
         <div class="post-content">
-            <h2 id="目录结构"><a href="#目录结构" class="headerlink" title="目录结构"></a>目录结构</h2><p>我们要定义一个<code>config.ini</code>文件，放我们需要的配置参数，然后写一个<code>getConfig.py</code>模块定义解析配置参数的函数<code>getConfig()</code></p>
-<img src="1.JPG">
+            <h3 id="Remote-API-function-return-codes（返回值）"><a href="#Remote-API-function-return-codes（返回值）" class="headerlink" title="Remote API function return codes（返回值）"></a>Remote API function return codes（返回值）</h3><table>
+<thead>
+<tr>
+<th>字符形式</th>
+<th>数值</th>
+<th>解释</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>simx_return_ok</td>
+<td>0</td>
+<td>函数执行良好</td>
+</tr>
+<tr>
+<td>simx_return_novalue_flag</td>
+<td>1</td>
+<td>输入缓冲区中没有命令答复。取决于操作模式，不一定是错误。</td>
+</tr>
+<tr>
+<td>simx_return_timeout_flag</td>
+<td>2</td>
+<td>函数执行超时</td>
+</tr>
+<tr>
+<td>simx_return_illegal_opmode_flag</td>
+<td>4</td>
+<td>给定函数不支持指定的操作模式</td>
+</tr>
+<tr>
+<td>simx_return_remote_error_flag</td>
+<td>8</td>
+<td>该函数在服务器端导致错误（例如，指定了无效handle）</td>
+</tr>
+<tr>
+<td>simx_return_split_progress_flag</td>
+<td>16</td>
+<td>通信线程仍在处理相同类型的先前拆分命令</td>
+</tr>
+<tr>
+<td>simx_return_local_error_flag</td>
+<td>32</td>
+<td>该函数在客户端导致错误</td>
+</tr>
+<tr>
+<td>simx_return_initialize_error_flag</td>
+<td>64</td>
+<td>simxStart尚未被调用</td>
+</tr>
+</tbody></table>
+<p>写程序时，返回值为sim.simx_return_ok就等同于0</p>
+<h3 id="Remote-API-function-operation-modes（操作模式）"><a href="#Remote-API-function-operation-modes（操作模式）" class="headerlink" title="Remote API function operation modes（操作模式）"></a>Remote API function operation modes（操作模式）</h3><p>调用大多数远程API函数时，它们将转换为可能传递到服务器的命令，并返回来自服务器的答复。 远程API函数的操作模式定义了这些命令和命令响应的确切处理方式：</p>
+<table>
+<thead>
+<tr>
+<th>模式名称</th>
+<th>特性</th>
+<th>备注</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>simx_opmode_oneshot</td>
+<td>非阻塞</td>
+<td>发送该命令，并返回对同一命令的先前答复（如果有）。该函数不等待实际的答复。</td>
+</tr>
+<tr>
+<td>simx_opmode_blocking</td>
+<td>阻塞</td>
+<td>发送命令，函数将等待实际的答复并返回（如果函数没有超时）。 收到的命令答复不会在inbox buffer中保留</td>
+</tr>
+<tr>
+<td>simx_opmode_buffer</td>
+<td>非阻塞</td>
+<td>返回对同一命令的先前答复（如果有）。该命令不会发送给服务端，函数也不等待实际的答复。</td>
+</tr>
+<tr>
+<td>simx_opmode_streaming + alpha</td>
+<td>非阻塞</td>
+<td>发送该命令，并返回对同一命令的先前答复（如果有）。 该命令将在服务器端连续执行。 该函数不等待实际的答复。 Alpha是介于0-65535之间的值，表示在服务器端再次执行同一命令之前所需的延迟（以毫秒为单位）。</td>
+</tr>
+</tbody></table>
 
-<h2 id="文件详解-getConfig-py"><a href="#文件详解-getConfig-py" class="headerlink" title="文件详解-getConfig.py"></a>文件详解-getConfig.py</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># coding=utf-8</span></span><br><span class="line"><span class="keyword">import</span> configparser</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">str2bool</span><span class="params">(v)</span>:</span></span><br><span class="line">  <span class="keyword">return</span> v.lower() <span class="keyword">in</span> (<span class="string">"yes"</span>, <span class="string">"true"</span>, <span class="string">"t"</span>, <span class="string">"1"</span>)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">getConfig</span><span class="params">(configFile=<span class="string">'config.ini'</span>)</span>:</span></span><br><span class="line">	parser = configparser.ConfigParser()</span><br><span class="line">	parser.read(configFile)</span><br><span class="line">	_conf_ints = [(key,int(value)) <span class="keyword">for</span> key,value <span class="keyword">in</span> parser.items(<span class="string">'ints'</span>)]</span><br><span class="line">	_conf_floats = [(key,float(value)) <span class="keyword">for</span> key,value <span class="keyword">in</span> parser.items(<span class="string">'floats'</span>)]</span><br><span class="line">	_conf_strings = [(key,str(value)) <span class="keyword">for</span> key,value <span class="keyword">in</span> parser.items(<span class="string">'strings'</span>)]</span><br><span class="line">	_conf_booleans = [(key,str2bool(value)) <span class="keyword">for</span> key,value <span class="keyword">in</span> parser.items(<span class="string">'booleans'</span>)]</span><br><span class="line">	<span class="keyword">return</span> dict(_conf_ints+_conf_floats+_conf_strings+_conf_booleans)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">	params = getConfig()</span><br><span class="line">	print(params)</span><br></pre></td></tr></table></figure>
-
-<h2 id="文件详解-config-ini"><a href="#文件详解-config-ini" class="headerlink" title="文件详解-config.ini"></a>文件详解-config.ini</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">[ints]</span><br><span class="line">a_int = 0</span><br><span class="line"></span><br><span class="line">[floats]</span><br><span class="line">a_float = 0.5</span><br><span class="line"></span><br><span class="line">[strings]</span><br><span class="line">a_str = /mnt/proj/</span><br><span class="line"></span><br><span class="line">[booleans]</span><br><span class="line">a_bool = True</span><br></pre></td></tr></table></figure>
-
-<h2 id="如何使用"><a href="#如何使用" class="headerlink" title="如何使用"></a>如何使用</h2><p>使用时，我们从主文件中可以调用<code>getConfig()</code>去完成解析，将配置参数转换为一个字典结构，便于主程序使用我们的配置参数。</p>
-<img src="2.JPG">
         </div>
 
         
@@ -234,10 +299,10 @@
         </section>
         <section class="post-nav">
             
-                <a class="prev" rel="prev" href="/2019/12/30/Python-pysnooper调试器/">Python+pysnooper调试器</a>
+                <a class="prev" rel="prev" href="/2020/01/02/tensorflow1-X-Ch1-基本概念/">tensorflow1.X_Ch1_基本概念</a>
             
             
-            <a class="next" rel="next" href="/2019/12/22/Python-tensorboardX/">Python+tensorboardX</a>
+            <a class="next" rel="next" href="/2019/12/31/CoppeliaSim-Python远程接口/">CoppeliaSim+Python远程接口</a>
             
         </section>
 

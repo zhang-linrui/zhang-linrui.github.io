@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta name="generator" content="Hexo 3.9.0">
+    <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <meta name="author" content="Linrui Zhang">
+
+
+
+
+
+<title>tensorflow1.X_Ch2_进阶概念 | Zhanglr&#39;s Blog</title>
+
+
+
+    <link rel="icon" href="/favicon.ico">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/js/script.js"></script>
+    
+    <script src="/js/tocbot.min.js"></script>
+    
+
+
+
+    
+    
+        
+    
+
+
+</head>
+<body>
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">Home·主页</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/archives">Posts·文章</a>
+                
+                    <a class="menu-item" href="/category">Categories·分类</a>
+                
+                    <a class="menu-item" href="/about">About·关于我</a>
+                
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
+            </div>
+
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">Home·主页</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/archives">Posts·文章</a>
+                
+                    <a class="menu-item" href="/category">Categories·分类</a>
+                
+                    <a class="menu-item" href="/about">About·关于我</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+        <div class="main">
+            <div class="container">
+    
+    
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">Expand all</a>
+        <a onclick="go_top()">Back to top</a>
+        <a onclick="go_bottom()">Go to bottom</a>
+    </div>
+</div>
+
+<script>
+    document.ready(
+        function () {
+            tocbot.init({
+                tocSelector: '.tocbot-list',
+                contentSelector: '.post-content',
+                headingSelector: 'h1, h2, h3, h4, h5',
+                collapseDepth: 1,
+                orderedList: false,
+                scrollSmooth: true,
+            })
+        }
+    )
+
+    function expand_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 6,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "collapse_toc()");
+        b.innerHTML = "Collapse all"
+    }
+
+    function collapse_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 1,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "expand_toc()");
+        b.innerHTML = "Expand all"
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+</script>
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">tensorflow1.X_Ch2_进阶概念</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">Linrui Zhang</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">January 3, 2020&nbsp;&nbsp;0:54:58</a>
+                        </span>
+                    
+                    
+                        <span class="post-category">
+                    Category:
+                            
+                                <a href="/category/tensorflow/">tensorflow</a>
+                            
+                        </span>
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <h2 id="本节目标"><a href="#本节目标" class="headerlink" title="本节目标"></a>本节目标</h2><p>神经网络搭建的优化方法：激活函数、损失函数、指数衰减学习率、滑动平均、正则化等</p>
+<h2 id="激活函数-activation-function"><a href="#激活函数-activation-function" class="headerlink" title="激活函数 activation function"></a>激活函数 activation function</h2><p>我们在前向传播过程中，通过激活函数引入非线性性。y = f(WX + b)</p>
+<img src="1.JPG" width="500">
+
+<h2 id="损失函数-loss-function"><a href="#损失函数-loss-function" class="headerlink" title="损失函数 loss function"></a>损失函数 loss function</h2><p>MSE</p>
+<img src="2.JPG" width="500">
+
+<p>Custom</p>
+<img src="3.JPG" width="500">
+
+<p>CE</p>
+<img src="4.JPG" width="500">
+
+<p>我们必须使用clip来防止概率小于0或大于1的情况出现。</p>
+<p>实际使用时，我们不用自己写，一般使用TF自带的softmax+cross_entropy功能。</p>
+<img src="5.JPG" width="500">
+
+<h2 id="学习率-learning-rate"><a href="#学习率-learning-rate" class="headerlink" title="学习率 learning rate"></a>学习率 learning rate</h2><p>我们用梯度下降算法优化损失函数y=(w+1)^2，即求出最优w，使y最小。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> tensorflow <span class="keyword">as</span> tf</span><br><span class="line"><span class="keyword">import</span> os</span><br><span class="line">os.environ[<span class="string">'TF_CPP_MIN_LOG_LEVEL'</span>] = <span class="string">'2'</span></span><br><span class="line"></span><br><span class="line">STEPS = <span class="number">40</span></span><br><span class="line"></span><br><span class="line">w = tf.Variable(tf.constant(<span class="number">5</span>,dtype=tf.float32))</span><br><span class="line">loss = tf.square(w + <span class="number">1</span>)</span><br><span class="line">train_step = tf.train.GradientDescentOptimizer(<span class="number">0.02</span>).minimize(loss) <span class="comment"># lr=0.2 常数</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">with</span> tf.Session() <span class="keyword">as</span> sess:</span><br><span class="line">    init_op = tf.global_variables_initializer()</span><br><span class="line">    sess.run(init_op)</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(STEPS):</span><br><span class="line">        loss_val = sess.run(loss)</span><br><span class="line">        print(<span class="string">"After &#123;&#125; steps,, loss is &#123;&#125;"</span>.format(i,loss_val))</span><br><span class="line">        sess.run(train_step)</span><br></pre></td></tr></table></figure>
+
+<p>我们分别把学习率设为0.2,0.02,1.2:</p>
+<img src="LR.png">
+
+<p>可以看到，学习率太低收敛慢，学习率太高不收敛，因此要合理设计和条件超参数learning rate。</p>
+<h2 id="指数衰减学习率"><a href="#指数衰减学习率" class="headerlink" title="指数衰减学习率"></a>指数衰减学习率</h2><img src="6.JPG" width="550">
+
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> tensorflow <span class="keyword">as</span> tf</span><br><span class="line"><span class="keyword">import</span> os</span><br><span class="line">os.environ[<span class="string">'TF_CPP_MIN_LOG_LEVEL'</span>] = <span class="string">'2'</span></span><br><span class="line"></span><br><span class="line">STEPS = <span class="number">40</span></span><br><span class="line">LEARNING_RATE_BASE = <span class="number">0.5</span> <span class="comment"># 最初学习率</span></span><br><span class="line">LEARNING_RATE_DECAY = <span class="number">0.99</span> <span class="comment"># 衰减率</span></span><br><span class="line">LEARNING_RATE_STEP = <span class="number">5</span></span><br><span class="line"><span class="comment"># 这里为了方便设为5,一般设置为:总样本数/BATCH_size,相当于1epoch衰减一次(staircase时)</span></span><br><span class="line"></span><br><span class="line">global_step = tf.Variable(<span class="number">0</span>,trainable=<span class="literal">False</span>) <span class="comment"># 运行计步器</span></span><br><span class="line"></span><br><span class="line">lr = tf.train.exponential_decay(LEARNING_RATE_BASE,global_step,</span><br><span class="line">                                LEARNING_RATE_STEP,LEARNING_RATE_DECAY,staircase=<span class="literal">True</span>)</span><br><span class="line"></span><br><span class="line">w = tf.Variable(tf.constant(<span class="number">5</span>,dtype=tf.float32))</span><br><span class="line">loss = tf.square(w + <span class="number">1</span>)</span><br><span class="line">train_step = tf.train.GradientDescentOptimizer(lr).minimize(loss,global_step)</span><br><span class="line"><span class="comment"># 在运行train_step时，global_step++,一定要写上global_step,否则一直是0，学习率不能正常衰减</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">with</span> tf.Session() <span class="keyword">as</span> sess:</span><br><span class="line">    init_op = tf.global_variables_initializer()</span><br><span class="line">    sess.run(init_op)</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(STEPS):</span><br><span class="line">        loss_val = sess.run(loss)</span><br><span class="line">        lr_val = sess.run(lr)</span><br><span class="line">        print(<span class="string">"After &#123;&#125; steps,, loss is &#123;&#125;, lr is &#123;&#125;"</span>.format(i,loss_val,lr_val))</span><br><span class="line">        sess.run(train_step)</span><br></pre></td></tr></table></figure>
+
+<p>staircase在为1和0时的情形:</p>
+<img src="exp_decay.png">
+
+<h2 id="滑动平均"><a href="#滑动平均" class="headerlink" title="滑动平均"></a>滑动平均</h2><p>滑动平均（影子值）：记录了每个参数一段时间内过往值的平均，增加了模型的泛化性。</p>
+<p>滑动平均针对所有参数W和b（和正则化只针对W不同）</p>
+<p>像是给参数增加了影子，参数变化，影子缓慢追随。</p>
+<img src="7.JPG" width="550">
+
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> tensorflow <span class="keyword">as</span> tf</span><br><span class="line"><span class="keyword">import</span> os</span><br><span class="line">os.environ[<span class="string">'TF_CPP_MIN_LOG_LEVEL'</span>] = <span class="string">'2'</span></span><br><span class="line"></span><br><span class="line">STEPS = <span class="number">40</span></span><br><span class="line">LEARNING_RATE = <span class="number">0.1</span></span><br><span class="line">MOVING_AVERAGE_DECAY = <span class="number">0.99</span> <span class="comment"># 滑动平均衰减率</span></span><br><span class="line"></span><br><span class="line">global_step = tf.Variable(<span class="number">0</span>,trainable=<span class="literal">False</span>) <span class="comment"># 运行计步器</span></span><br><span class="line"></span><br><span class="line">w = tf.Variable(tf.constant(<span class="number">5</span>,dtype=tf.float32))</span><br><span class="line">loss = tf.square(w + <span class="number">1</span>)</span><br><span class="line">train_step = tf.train.GradientDescentOptimizer(LEARNING_RATE).minimize(loss,global_step)</span><br><span class="line"></span><br><span class="line">ema = tf.train.ExponentialMovingAverage(MOVING_AVERAGE_DECAY,global_step) <span class="comment"># 实例化滑动平均类</span></span><br><span class="line">ema_op = ema.apply(tf.trainable_variables())</span><br><span class="line"><span class="comment"># 定义滑动平均操作，不知道为啥不能像init_op一样定义在session里，会报错</span></span><br><span class="line"><span class="comment"># 这里相当于 ema_op = ema.apply([w])</span></span><br><span class="line"></span><br><span class="line">w_val_history = []</span><br><span class="line">w_shadow_val_history = []</span><br><span class="line"></span><br><span class="line"><span class="keyword">with</span> tf.Session() <span class="keyword">as</span> sess:</span><br><span class="line">    init_op = tf.global_variables_initializer()</span><br><span class="line">    sess.run(init_op)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(STEPS):</span><br><span class="line">        loss_val = sess.run(loss)</span><br><span class="line">        w_val = sess.run(w)</span><br><span class="line">        w_val_history.append(w_val)</span><br><span class="line"></span><br><span class="line">        <span class="comment"># 执行滑动平均，并计算w的滑动平均</span></span><br><span class="line">        sess.run(ema_op)</span><br><span class="line">        w_val_shadow = sess.run(ema.average(w))</span><br><span class="line">        w_shadow_val_history.append(w_val_shadow)</span><br><span class="line"></span><br><span class="line">        print(<span class="string">"After &#123;&#125; steps,, loss is &#123;&#125;"</span>.format(i,loss_val))</span><br><span class="line">        sess.run(train_step)</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"></span><br><span class="line">plt.title(<span class="string">'w v.s. w_shadow'</span>)</span><br><span class="line">x = np.arange(<span class="number">40</span>)</span><br><span class="line">plt.plot(x, w_val_history, color=<span class="string">'green'</span>, label=<span class="string">'w'</span>)</span><br><span class="line">plt.plot(x,w_shadow_val_history, color=<span class="string">'red'</span>, label=<span class="string">'w_shadow'</span>)</span><br><span class="line">plt.legend()</span><br><span class="line">plt.xlabel(<span class="string">'steps'</span>)</span><br><span class="line">plt.ylabel(<span class="string">'weight'</span>)</span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
+
+<img src="shadow.png">
+
+<h2 id="正则化"><a href="#正则化" class="headerlink" title="正则化"></a>正则化</h2><img src="8.JPG" width="550">
+
+<p>通过如下点的分类问题来看正则化的作用和使用。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"><span class="comment">#生成带分割数据集</span></span><br><span class="line">seed = <span class="number">111</span></span><br><span class="line">rdm = np.random.RandomState(seed)</span><br><span class="line">X = rdm.randn(<span class="number">300</span>,<span class="number">2</span>)</span><br><span class="line">Y_ = [int(x0*x0 + x1*x1 &lt; <span class="number">2</span>) <span class="keyword">for</span> (x0,x1) <span class="keyword">in</span> X]</span><br><span class="line">Y_c = [(<span class="string">'red'</span> <span class="keyword">if</span> y <span class="keyword">else</span> <span class="string">'blue'</span>) <span class="keyword">for</span> y <span class="keyword">in</span> Y_]</span><br><span class="line"></span><br><span class="line">plt.scatter(X[:,<span class="number">0</span>],X[:,<span class="number">1</span>],c=Y_c)</span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
+
+<img src="data.png">
+
+<h3 id="无正则化"><a href="#无正则化" class="headerlink" title="无正则化"></a>无正则化</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">import</span> tensorflow <span class="keyword">as</span> tf</span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"><span class="keyword">import</span> os</span><br><span class="line">os.environ[<span class="string">'TF_CPP_MIN_LOG_LEVEL'</span>] = <span class="string">'2'</span></span><br><span class="line"></span><br><span class="line">BATCH_SIZE = <span class="number">30</span></span><br><span class="line">STEPS = <span class="number">10000</span></span><br><span class="line">seed = <span class="number">111</span></span><br><span class="line">rdm = np.random.RandomState(seed)</span><br><span class="line">X = rdm.randn(<span class="number">300</span>,<span class="number">2</span>)</span><br><span class="line">Y_ = [int(x0*x0 + x1*x1 &lt; <span class="number">2</span>) <span class="keyword">for</span> (x0,x1) <span class="keyword">in</span> X]</span><br><span class="line">Y_c = [(<span class="string">'red'</span> <span class="keyword">if</span> y <span class="keyword">else</span> <span class="string">'blue'</span>) <span class="keyword">for</span> y <span class="keyword">in</span> Y_]</span><br><span class="line">Y_ = np.asarray(Y_).reshape(<span class="number">-1</span>,<span class="number">1</span>)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">get_weight</span><span class="params">(shape,regularizer)</span>:</span></span><br><span class="line">	w = tf.Variable(tf.random_normal(shape),dtype=tf.float32)</span><br><span class="line">	tf.add_to_collection(<span class="string">'losses'</span>,tf.contrib.layers.l2_regularizer(regularizer)(w))</span><br><span class="line">	<span class="keyword">return</span> w</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">get_bias</span><span class="params">(shape)</span>:</span></span><br><span class="line">	b = tf.Variable(tf.constant(<span class="number">0.</span>,shape=shape))</span><br><span class="line">	<span class="keyword">return</span> b</span><br><span class="line"></span><br><span class="line">x = tf.placeholder(tf.float32,shape=(<span class="literal">None</span>,<span class="number">2</span>))</span><br><span class="line">y_ = tf.placeholder(tf.float32,shape=(<span class="literal">None</span>,<span class="number">1</span>))</span><br><span class="line"></span><br><span class="line">w1 = get_weight([<span class="number">2</span>,<span class="number">11</span>],<span class="number">0.01</span>)</span><br><span class="line">b1 = get_bias([<span class="number">11</span>])</span><br><span class="line">y1 = tf.nn.relu(tf.matmul(x,w1)+b1)</span><br><span class="line"></span><br><span class="line">w2 = get_weight([<span class="number">11</span>,<span class="number">1</span>],<span class="number">0.01</span>)</span><br><span class="line">b2 = get_bias([<span class="number">1</span>])</span><br><span class="line">y = tf.matmul(y1,w2)+b2</span><br><span class="line"></span><br><span class="line">loss_mse = tf.reduce_mean(tf.square(y-y_))</span><br><span class="line">loss_total = loss_mse + tf.add_n(tf.get_collection(<span class="string">'losses'</span>))</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># 不含正则化</span></span><br><span class="line">train_step = tf.train.AdamOptimizer(<span class="number">0.001</span>).minimize(loss_mse)</span><br><span class="line"></span><br><span class="line"><span class="keyword">with</span> tf.Session() <span class="keyword">as</span> sess:</span><br><span class="line">	init_op = tf.global_variables_initializer()</span><br><span class="line">	sess.run(init_op)</span><br><span class="line"></span><br><span class="line">	<span class="keyword">for</span> i <span class="keyword">in</span> range(STEPS):</span><br><span class="line">		start = (i*BATCH_SIZE)%<span class="number">300</span></span><br><span class="line">		end = start + BATCH_SIZE</span><br><span class="line">		sess.run(train_step,feed_dict=&#123;x:X[start:end],y_:Y_[start:end]&#125;)</span><br><span class="line">		<span class="keyword">if</span> i % <span class="number">2000</span> == <span class="number">0</span>:</span><br><span class="line">			loss_mse_val = sess.run(loss_mse,feed_dict=&#123;x:X[start:end],y_:Y_[start:end]&#125;)</span><br><span class="line">			print(<span class="string">"After &#123;&#125; steps, loss is &#123;&#125;"</span>.format(i,loss_mse_val))</span><br><span class="line">	xx, yy = np.mgrid[<span class="number">-3</span>:<span class="number">3</span>:<span class="number">0.1</span>,<span class="number">-3</span>:<span class="number">3</span>:<span class="number">0.1</span>]</span><br><span class="line">	grid = np.c_[xx.ravel(),yy.ravel()]</span><br><span class="line">	probs = sess.run(y,feed_dict=&#123;x:grid&#125;)</span><br><span class="line">	probs = probs.reshape(xx.shape)</span><br><span class="line"></span><br><span class="line">plt.scatter(X[:,<span class="number">0</span>],X[:,<span class="number">1</span>],c = Y_c)</span><br><span class="line">plt.contour(xx,yy,probs,levels=[<span class="number">.5</span>])</span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
+
+<img src="regular1.png">
+
+<h3 id="L2正则化"><a href="#L2正则化" class="headerlink" title="L2正则化"></a>L2正则化</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">import</span> tensorflow <span class="keyword">as</span> tf</span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"><span class="keyword">import</span> os</span><br><span class="line">os.environ[<span class="string">'TF_CPP_MIN_LOG_LEVEL'</span>] = <span class="string">'2'</span></span><br><span class="line"></span><br><span class="line">BATCH_SIZE = <span class="number">30</span></span><br><span class="line">STEPS = <span class="number">10000</span></span><br><span class="line">seed = <span class="number">111</span></span><br><span class="line">rdm = np.random.RandomState(seed)</span><br><span class="line">X = rdm.randn(<span class="number">300</span>,<span class="number">2</span>)</span><br><span class="line">Y_ = [int(x0*x0 + x1*x1 &lt; <span class="number">2</span>) <span class="keyword">for</span> (x0,x1) <span class="keyword">in</span> X]</span><br><span class="line">Y_c = [(<span class="string">'red'</span> <span class="keyword">if</span> y <span class="keyword">else</span> <span class="string">'blue'</span>) <span class="keyword">for</span> y <span class="keyword">in</span> Y_]</span><br><span class="line">Y_ = np.asarray(Y_).reshape(<span class="number">-1</span>,<span class="number">1</span>)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">get_weight</span><span class="params">(shape,regularizer)</span>:</span></span><br><span class="line">	w = tf.Variable(tf.random_normal(shape),dtype=tf.float32)</span><br><span class="line">	tf.add_to_collection(<span class="string">'losses'</span>,tf.contrib.layers.l2_regularizer(regularizer)(w))</span><br><span class="line">	<span class="keyword">return</span> w</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">get_bias</span><span class="params">(shape)</span>:</span></span><br><span class="line">	b = tf.Variable(tf.constant(<span class="number">0.</span>,shape=shape))</span><br><span class="line">	<span class="keyword">return</span> b</span><br><span class="line"></span><br><span class="line">x = tf.placeholder(tf.float32,shape=(<span class="literal">None</span>,<span class="number">2</span>))</span><br><span class="line">y_ = tf.placeholder(tf.float32,shape=(<span class="literal">None</span>,<span class="number">1</span>))</span><br><span class="line"></span><br><span class="line">w1 = get_weight([<span class="number">2</span>,<span class="number">11</span>],<span class="number">0.01</span>)</span><br><span class="line">b1 = get_bias([<span class="number">11</span>])</span><br><span class="line">y1 = tf.nn.relu(tf.matmul(x,w1)+b1)</span><br><span class="line"></span><br><span class="line">w2 = get_weight([<span class="number">11</span>,<span class="number">1</span>],<span class="number">0.01</span>)</span><br><span class="line">b2 = get_bias([<span class="number">1</span>])</span><br><span class="line">y = tf.matmul(y1,w2)+b2</span><br><span class="line"></span><br><span class="line">loss_mse = tf.reduce_mean(tf.square(y-y_))</span><br><span class="line">loss_total = loss_mse + tf.add_n(tf.get_collection(<span class="string">'losses'</span>))</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># 含正则化</span></span><br><span class="line">train_step = tf.train.AdamOptimizer(<span class="number">0.001</span>).minimize(loss_total)</span><br><span class="line"></span><br><span class="line"><span class="keyword">with</span> tf.Session() <span class="keyword">as</span> sess:</span><br><span class="line">	init_op = tf.global_variables_initializer()</span><br><span class="line">	sess.run(init_op)</span><br><span class="line"></span><br><span class="line">	<span class="keyword">for</span> i <span class="keyword">in</span> range(STEPS):</span><br><span class="line">		start = (i*BATCH_SIZE)%<span class="number">300</span></span><br><span class="line">		end = start + BATCH_SIZE</span><br><span class="line">		sess.run(train_step,feed_dict=&#123;x:X[start:end],y_:Y_[start:end]&#125;)</span><br><span class="line">		<span class="keyword">if</span> i % <span class="number">2000</span> == <span class="number">0</span>:</span><br><span class="line">			loss_total_val = sess.run(loss_total,feed_dict=&#123;x:X[start:end],y_:Y_[start:end]&#125;)</span><br><span class="line">			print(<span class="string">"After &#123;&#125; steps, loss is &#123;&#125;"</span>.format(i,loss_total_val))</span><br><span class="line">	xx, yy = np.mgrid[<span class="number">-3</span>:<span class="number">3</span>:<span class="number">0.1</span>,<span class="number">-3</span>:<span class="number">3</span>:<span class="number">0.1</span>]</span><br><span class="line">	grid = np.c_[xx.ravel(),yy.ravel()]</span><br><span class="line">	probs = sess.run(y,feed_dict=&#123;x:grid&#125;)</span><br><span class="line">	probs = probs.reshape(xx.shape)</span><br><span class="line"></span><br><span class="line">plt.scatter(X[:,<span class="number">0</span>],X[:,<span class="number">1</span>],c = Y_c)</span><br><span class="line">plt.contour(xx,yy,probs,levels=[<span class="number">.5</span>])</span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
+
+<img src="regular2.png">
+        </div>
+
+        
+            <section class="post-copyright">
+                
+                    <p class="copyright-item">
+                        <span>Author:</span>
+                        <span>Linrui Zhang</span>
+                    </p>
+                
+                
+                
+                
+
+            </section>
+        
+        <section class="post-tags">
+            <div>
+                <span>Tag(s):</span>
+                <span class="tag">
+                    
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">back</a>
+                <span>· </span>
+                <a href="/">home</a>
+            </div>
+        </section>
+        <section class="post-nav">
+            
+            
+            <a class="next" rel="next" href="/2020/01/02/tensorflow1-X-Ch1-基本概念/">tensorflow1.X_Ch1_基本概念</a>
+            
+        </section>
+
+
+    </article>
+</div>
+
+        </div>
+        <footer id="footer" class="footer">
+    <div class="copyright">
+        <span>© Linrui Zhang | Powered by <a href="https://hexo.io" target="_blank">Hexo</a> & <a href="https://github.com/Siricee/hexo-theme-Chic" target="_blank">Chic</a></span>
+    </div>
+</footer>
+
+    </div>
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","model":{"jsonPath":"/live2dw/assets/hijiki.model.json"},"display":{"position":"right","width":200,"height":400},"mobile":{"show":true},"log":false,"tagMode":false});</script></body>
+</html>

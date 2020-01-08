@@ -11,7 +11,7 @@
 
 
 
-<title>Python+configparser参数解析器 | Zhanglr&#39;s Blog</title>
+<title>Python+pysnooper调试器 | Zhanglr&#39;s Blog</title>
 
 
 
@@ -169,7 +169,7 @@
     
     <article class="post-wrap">
         <header class="post-header">
-            <h1 class="post-title">Python+configparser参数解析器</h1>
+            <h1 class="post-title">Python+pysnooper调试器</h1>
             
                 <div class="post-meta">
                     
@@ -178,7 +178,7 @@
 
                     
                         <span class="post-time">
-                        Date: <a href="#">December 27, 2019&nbsp;&nbsp;22:08:53</a>
+                        Date: <a href="#">December 30, 2019&nbsp;&nbsp;9:03:44</a>
                         </span>
                     
                     
@@ -194,15 +194,17 @@
         </header>
 
         <div class="post-content">
-            <h2 id="目录结构"><a href="#目录结构" class="headerlink" title="目录结构"></a>目录结构</h2><p>我们要定义一个<code>config.ini</code>文件，放我们需要的配置参数，然后写一个<code>getConfig.py</code>模块定义解析配置参数的函数<code>getConfig()</code></p>
+            <h2 id="pysnooper"><a href="#pysnooper" class="headerlink" title="pysnooper"></a>pysnooper</h2><p>snooper = 窥探者，pysnooper是一个轻量级的python调试器包，可以直接在代码中插入并在运行过程中将调试信息输出在终端或日志文件中。</p>
+<h2 id="装饰器用法"><a href="#装饰器用法" class="headerlink" title="装饰器用法"></a>装饰器用法</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> pysnooper</span><br><span class="line"><span class="meta">@pysnooper.snoop(output="./log/debug.log",prefix="--foo--")</span></span><br><span class="line"><span class="comment">#@pysnooper.snoop(prefix="--foo--") 不指定output则输出在终端</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">foo</span><span class="params">(number)</span>:</span></span><br><span class="line">    PI = <span class="number">1</span></span><br><span class="line">    SIGMA = <span class="number">0</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">1</span>,number+<span class="number">1</span>):</span><br><span class="line">            PI *= i</span><br><span class="line">    <span class="keyword">return</span> PI</span><br><span class="line">print(<span class="string">"5! is &#123;&#125;"</span>.format(foo(<span class="number">5</span>)))</span><br></pre></td></tr></table></figure>
+
+<img src="2.JPG">
+
+<h2 id="上下文用法"><a href="#上下文用法" class="headerlink" title="上下文用法"></a>上下文用法</h2><p>如果只想看函数中的某块的运行逻辑和结果，我们可以使用with上下文：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> pysnooper</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">foo</span><span class="params">(number)</span>:</span></span><br><span class="line">    PI = <span class="number">1</span></span><br><span class="line">    SIGMA = <span class="number">0</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">1</span>,number+<span class="number">1</span>):</span><br><span class="line">            PI *= i</span><br><span class="line">    <span class="comment"># 只看sigma部分的结果</span></span><br><span class="line">    <span class="keyword">with</span> pysnooper.snoop(prefix=<span class="string">"--sigma--"</span>):</span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">1</span>,number+<span class="number">1</span>):</span><br><span class="line">            SIGMA += i</span><br><span class="line">    <span class="keyword">return</span> PI</span><br><span class="line">print(<span class="string">"5! is &#123;&#125;"</span>.format(foo(<span class="number">5</span>)))</span><br></pre></td></tr></table></figure>
+
 <img src="1.JPG">
 
-<h2 id="文件详解-getConfig-py"><a href="#文件详解-getConfig-py" class="headerlink" title="文件详解-getConfig.py"></a>文件详解-getConfig.py</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># coding=utf-8</span></span><br><span class="line"><span class="keyword">import</span> configparser</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">str2bool</span><span class="params">(v)</span>:</span></span><br><span class="line">  <span class="keyword">return</span> v.lower() <span class="keyword">in</span> (<span class="string">"yes"</span>, <span class="string">"true"</span>, <span class="string">"t"</span>, <span class="string">"1"</span>)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">getConfig</span><span class="params">(configFile=<span class="string">'config.ini'</span>)</span>:</span></span><br><span class="line">	parser = configparser.ConfigParser()</span><br><span class="line">	parser.read(configFile)</span><br><span class="line">	_conf_ints = [(key,int(value)) <span class="keyword">for</span> key,value <span class="keyword">in</span> parser.items(<span class="string">'ints'</span>)]</span><br><span class="line">	_conf_floats = [(key,float(value)) <span class="keyword">for</span> key,value <span class="keyword">in</span> parser.items(<span class="string">'floats'</span>)]</span><br><span class="line">	_conf_strings = [(key,str(value)) <span class="keyword">for</span> key,value <span class="keyword">in</span> parser.items(<span class="string">'strings'</span>)]</span><br><span class="line">	_conf_booleans = [(key,str2bool(value)) <span class="keyword">for</span> key,value <span class="keyword">in</span> parser.items(<span class="string">'booleans'</span>)]</span><br><span class="line">	<span class="keyword">return</span> dict(_conf_ints+_conf_floats+_conf_strings+_conf_booleans)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">	params = getConfig()</span><br><span class="line">	print(params)</span><br></pre></td></tr></table></figure>
 
-<h2 id="文件详解-config-ini"><a href="#文件详解-config-ini" class="headerlink" title="文件详解-config.ini"></a>文件详解-config.ini</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">[ints]</span><br><span class="line">a_int = 0</span><br><span class="line"></span><br><span class="line">[floats]</span><br><span class="line">a_float = 0.5</span><br><span class="line"></span><br><span class="line">[strings]</span><br><span class="line">a_str = /mnt/proj/</span><br><span class="line"></span><br><span class="line">[booleans]</span><br><span class="line">a_bool = True</span><br></pre></td></tr></table></figure>
-
-<h2 id="如何使用"><a href="#如何使用" class="headerlink" title="如何使用"></a>如何使用</h2><p>使用时，我们从主文件中可以调用<code>getConfig()</code>去完成解析，将配置参数转换为一个字典结构，便于主程序使用我们的配置参数。</p>
-<img src="2.JPG">
         </div>
 
         
@@ -234,10 +236,10 @@
         </section>
         <section class="post-nav">
             
-                <a class="prev" rel="prev" href="/2019/12/30/Python-pysnooper调试器/">Python+pysnooper调试器</a>
+                <a class="prev" rel="prev" href="/2019/12/31/CoppeliaSim-Python远程接口/">CoppeliaSim+Python远程接口</a>
             
             
-            <a class="next" rel="next" href="/2019/12/22/Python-tensorboardX/">Python+tensorboardX</a>
+            <a class="next" rel="next" href="/2019/12/27/Python-configparser参数解析器/">Python+configparser参数解析器</a>
             
         </section>
 

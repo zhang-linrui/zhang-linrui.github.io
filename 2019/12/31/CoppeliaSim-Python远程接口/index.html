@@ -11,7 +11,7 @@
 
 
 
-<title>Python+configparser参数解析器 | Zhanglr&#39;s Blog</title>
+<title>CoppeliaSim+Python远程接口 | Zhanglr&#39;s Blog</title>
 
 
 
@@ -169,7 +169,7 @@
     
     <article class="post-wrap">
         <header class="post-header">
-            <h1 class="post-title">Python+configparser参数解析器</h1>
+            <h1 class="post-title">CoppeliaSim+Python远程接口</h1>
             
                 <div class="post-meta">
                     
@@ -178,31 +178,34 @@
 
                     
                         <span class="post-time">
-                        Date: <a href="#">December 27, 2019&nbsp;&nbsp;22:08:53</a>
+                        Date: <a href="#">December 31, 2019&nbsp;&nbsp;11:43:58</a>
                         </span>
                     
-                    
-                        <span class="post-category">
-                    Category:
-                            
-                                <a href="/category/python/">python</a>
-                            
-                        </span>
                     
                 </div>
             
         </header>
 
         <div class="post-content">
-            <h2 id="目录结构"><a href="#目录结构" class="headerlink" title="目录结构"></a>目录结构</h2><p>我们要定义一个<code>config.ini</code>文件，放我们需要的配置参数，然后写一个<code>getConfig.py</code>模块定义解析配置参数的函数<code>getConfig()</code></p>
-<img src="1.JPG">
+            <h2 id="准备"><a href="#准备" class="headerlink" title="准备"></a>准备</h2><ul>
+<li>新建一个工作目录，存放所有工程代码</li>
+<li>转到CoppeliaSim安装目录的programming/remoteApiBindings/python/python</li>
+<li>将<code>sim.py</code>和<code>simConst.py</code>复制到工作目录去</li>
+<li>转到CoppeliaSim安装目录的 programming/remoteApiBindings/lib/lib</li>
+<li>选择你的造作系统，如果是win，就把windows目录下的dll复制到工作目录去</li>
+</ul>
+<h2 id="Coppelia端"><a href="#Coppelia端" class="headerlink" title="Coppelia端"></a>Coppelia端</h2><ul>
+<li>选中任何一个物体，比如一张桌子</li>
+<li>右键→Add→Associated Child Script→Threaded Script</li>
+<li>打开创建的脚本（双击那个像文件一样的图标），找到<code>sysCall_threadmain()</code></li>
+<li>写入<code>simExtRemoteApiStart(19999)</code>，即在19999端口监听</li>
+<li>关闭所有预先写入的其他脚本</li>
+<li>开始仿真</li>
+</ul>
+<h2 id="Python端"><a href="#Python端" class="headerlink" title="Python端"></a>Python端</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> sim <span class="comment"># access all the sim elements</span></span><br><span class="line">sim.simxFinish(<span class="number">-1</span>) <span class="comment"># just in case, close all opened connections</span></span><br><span class="line">clientID=sim.simxStart(<span class="string">'127.0.0.1'</span>,<span class="number">19999</span>,<span class="literal">True</span>,<span class="literal">True</span>,<span class="number">5000</span>,<span class="number">5</span>) <span class="comment"># start a connection</span></span><br><span class="line"><span class="keyword">if</span> clientID!=<span class="number">-1</span>:</span><br><span class="line">	<span class="keyword">print</span> (<span class="string">"Connected to remote API server"</span>)</span><br><span class="line"><span class="keyword">else</span>:</span><br><span class="line">	print(<span class="string">"Not connected to remote API server"</span>)</span><br><span class="line">	sys.exit(<span class="string">"Could not connect"</span>)</span><br><span class="line">sim.simxFinish(clientID)</span><br></pre></td></tr></table></figure>
 
-<h2 id="文件详解-getConfig-py"><a href="#文件详解-getConfig-py" class="headerlink" title="文件详解-getConfig.py"></a>文件详解-getConfig.py</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># coding=utf-8</span></span><br><span class="line"><span class="keyword">import</span> configparser</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">str2bool</span><span class="params">(v)</span>:</span></span><br><span class="line">  <span class="keyword">return</span> v.lower() <span class="keyword">in</span> (<span class="string">"yes"</span>, <span class="string">"true"</span>, <span class="string">"t"</span>, <span class="string">"1"</span>)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">getConfig</span><span class="params">(configFile=<span class="string">'config.ini'</span>)</span>:</span></span><br><span class="line">	parser = configparser.ConfigParser()</span><br><span class="line">	parser.read(configFile)</span><br><span class="line">	_conf_ints = [(key,int(value)) <span class="keyword">for</span> key,value <span class="keyword">in</span> parser.items(<span class="string">'ints'</span>)]</span><br><span class="line">	_conf_floats = [(key,float(value)) <span class="keyword">for</span> key,value <span class="keyword">in</span> parser.items(<span class="string">'floats'</span>)]</span><br><span class="line">	_conf_strings = [(key,str(value)) <span class="keyword">for</span> key,value <span class="keyword">in</span> parser.items(<span class="string">'strings'</span>)]</span><br><span class="line">	_conf_booleans = [(key,str2bool(value)) <span class="keyword">for</span> key,value <span class="keyword">in</span> parser.items(<span class="string">'booleans'</span>)]</span><br><span class="line">	<span class="keyword">return</span> dict(_conf_ints+_conf_floats+_conf_strings+_conf_booleans)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">	params = getConfig()</span><br><span class="line">	print(params)</span><br></pre></td></tr></table></figure>
+<p>如果一切OK，那么你将看到”Connected to remote API server”</p>
 
-<h2 id="文件详解-config-ini"><a href="#文件详解-config-ini" class="headerlink" title="文件详解-config.ini"></a>文件详解-config.ini</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">[ints]</span><br><span class="line">a_int = 0</span><br><span class="line"></span><br><span class="line">[floats]</span><br><span class="line">a_float = 0.5</span><br><span class="line"></span><br><span class="line">[strings]</span><br><span class="line">a_str = /mnt/proj/</span><br><span class="line"></span><br><span class="line">[booleans]</span><br><span class="line">a_bool = True</span><br></pre></td></tr></table></figure>
-
-<h2 id="如何使用"><a href="#如何使用" class="headerlink" title="如何使用"></a>如何使用</h2><p>使用时，我们从主文件中可以调用<code>getConfig()</code>去完成解析，将配置参数转换为一个字典结构，便于主程序使用我们的配置参数。</p>
-<img src="2.JPG">
         </div>
 
         
@@ -234,10 +237,10 @@
         </section>
         <section class="post-nav">
             
-                <a class="prev" rel="prev" href="/2019/12/30/Python-pysnooper调试器/">Python+pysnooper调试器</a>
+                <a class="prev" rel="prev" href="/2019/12/31/CoppeliaSim-返回值常量与模式/">CoppeliaSim+返回值常量与模式</a>
             
             
-            <a class="next" rel="next" href="/2019/12/22/Python-tensorboardX/">Python+tensorboardX</a>
+            <a class="next" rel="next" href="/2019/12/30/Python-pysnooper调试器/">Python+pysnooper调试器</a>
             
         </section>
 
