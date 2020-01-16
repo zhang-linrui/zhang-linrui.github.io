@@ -11,7 +11,7 @@
 
 
 
-<title>命令行实用技巧 | Zhanglr&#39;s Blog</title>
+<title>MATLAB_Ch2_绘图 | Zhanglr&#39;s Blog</title>
 
 
 
@@ -169,7 +169,7 @@
     
     <article class="post-wrap">
         <header class="post-header">
-            <h1 class="post-title">命令行实用技巧</h1>
+            <h1 class="post-title">MATLAB_Ch2_绘图</h1>
             
                 <div class="post-meta">
                     
@@ -178,24 +178,43 @@
 
                     
                         <span class="post-time">
-                        Date: <a href="#">December 2, 2019&nbsp;&nbsp;16:08:31</a>
+                        Date: <a href="#">January 9, 2020&nbsp;&nbsp;10:55:32</a>
                         </span>
                     
+                    
+                        <span class="post-category">
+                    Category:
+                            
+                                <a href="/category/MATLAB/">MATLAB</a>
+                            
+                        </span>
                     
                 </div>
             
         </header>
 
         <div class="post-content">
-            <h2 id="pip"><a href="#pip" class="headerlink" title="pip"></a>pip</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ pip install 安装包名</span><br><span class="line">$ pip install --upgrade 要升级的包名</span><br><span class="line">$ pip uninstall 要卸载的包名</span><br></pre></td></tr></table></figure>
+            <h2 id="plot"><a href="#plot" class="headerlink" title="plot"></a>plot</h2><p>plot(x,y)就是绘制每一对坐标，x,y都是向量。如果单纯的plot(y)则把横坐标默认到[1,…,len(y)]</p>
+<figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">x = <span class="number">0</span>:<span class="built_in">pi</span>/<span class="number">20</span>:<span class="number">2</span>*<span class="built_in">pi</span>;</span><br><span class="line">y = <span class="built_in">cos</span>(x);</span><br><span class="line"><span class="built_in">plot</span>(x,y)</span><br></pre></td></tr></table></figure>
 
-<h2 id="mv"><a href="#mv" class="headerlink" title="mv"></a>mv</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ mv XXX* YYY/ <span class="comment"># 复制XXX开头的若干文件到YYY目录下</span></span><br></pre></td></tr></table></figure>
+<img src="1.JPG" width="300">
 
-<h2 id="conda"><a href="#conda" class="headerlink" title="conda"></a>conda</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">$ conda create -n py3 python=3.6 <span class="comment"># 创建环境py3</span></span><br><span class="line">$ conda activate py3 <span class="comment"># 激活环境py3</span></span><br><span class="line">$ conda deactivate <span class="comment"># 关闭环境，在base下用就切回系统python环境了</span></span><br><span class="line">$ conda info --envs <span class="comment"># 查询环境信息 == conda env list</span></span><br></pre></td></tr></table></figure>
+<p>连续两个plot，后一幅图会refresh掉之前的。想要保留，就要hold on，反之，hold off。</p>
+<figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">% 2 curves on one figure</span></span><br><span class="line">x = <span class="number">0</span>:<span class="built_in">pi</span>/<span class="number">20</span>:<span class="number">2</span>*<span class="built_in">pi</span>;</span><br><span class="line">y1 = <span class="built_in">cos</span>(x);</span><br><span class="line">y2 = <span class="built_in">sin</span>(x);</span><br><span class="line"><span class="built_in">hold</span> on;</span><br><span class="line"><span class="built_in">plot</span>(x,y1);</span><br><span class="line"><span class="built_in">plot</span>(x,y2);</span><br><span class="line"><span class="built_in">hold</span> off;</span><br></pre></td></tr></table></figure>
 
-<h2 id="bashrc"><a href="#bashrc" class="headerlink" title=".bashrc"></a>.bashrc</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ vim ~/.bashrc <span class="comment"># 修改</span></span><br><span class="line">$ <span class="built_in">source</span> ~/.bashrc <span class="comment"># 生效</span></span><br></pre></td></tr></table></figure>
+<img src="2.JPG" width="300">
 
-<h2 id="tree"><a href="#tree" class="headerlink" title="tree"></a>tree</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ tree <span class="comment"># 树状展示目录 sudo apt install tree</span></span><br></pre></td></tr></table></figure>
+<h2 id="plot-style"><a href="#plot-style" class="headerlink" title="plot style"></a>plot style</h2><p>plot(x,y,’str’)指定marker,line和color</p>
+<img src="3.JPG" width="500">
+
+<h2 id="legend"><a href="#legend" class="headerlink" title="legend"></a>legend</h2><figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">x = <span class="number">0</span>:<span class="built_in">pi</span>/<span class="number">20</span>:<span class="number">2</span>*<span class="built_in">pi</span>;</span><br><span class="line">y1 = <span class="built_in">cos</span>(x);</span><br><span class="line">y2 = <span class="built_in">sin</span>(x);</span><br><span class="line"><span class="built_in">hold</span> on;</span><br><span class="line"><span class="built_in">plot</span>(x,y1);</span><br><span class="line"><span class="built_in">plot</span>(x,y2);</span><br><span class="line"><span class="built_in">hold</span> off;</span><br><span class="line"><span class="built_in">legend</span>(<span class="string">'cos(x)'</span>,<span class="string">'sin(x)'</span>);</span><br></pre></td></tr></table></figure>
+
+<img src="4.JPG" width="300">
+
+<h2 id="title-and-lable"><a href="#title-and-lable" class="headerlink" title="title and ?lable"></a>title and ?lable</h2><p>在title和lable中可以使用tex格式语言，使公式更美观。</p>
+<figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">x = <span class="number">0</span>:<span class="number">0.1</span>:<span class="number">2</span>*<span class="built_in">pi</span>;</span><br><span class="line">y1 = <span class="built_in">sin</span>(x);</span><br><span class="line">y2 = <span class="built_in">exp</span>(-x);</span><br><span class="line"><span class="built_in">plot</span>(x,y1,<span class="string">'--*'</span>,x,y2,<span class="string">':o'</span>);</span><br><span class="line">xlabel(<span class="string">'0 - 2\pi'</span>);</span><br><span class="line">ylabel(<span class="string">'values'</span>);</span><br><span class="line">title(<span class="string">'Function Plots of sin(t) and e^&#123;-x&#125;'</span>); <span class="comment">% Latex style mathmatical expression</span></span><br><span class="line"><span class="built_in">legend</span>(<span class="string">'sin(x)'</span>,<span class="string">'e^&#123;-x&#125;'</span>);</span><br></pre></td></tr></table></figure>
+
+<img src="5.JPG" width="300">
 
 
         </div>
@@ -229,10 +248,8 @@
         </section>
         <section class="post-nav">
             
-                <a class="prev" rel="prev" href="/2019/12/03/tensorflow2-0-绪论/">tensorflow2.0_绪论</a>
             
-            
-            <a class="next" rel="next" href="/2019/10/12/hello-world/">Hello World</a>
+            <a class="next" rel="next" href="/2020/01/08/MATLAB-Ch1-基础/">MATLAB_Ch1_基础</a>
             
         </section>
 

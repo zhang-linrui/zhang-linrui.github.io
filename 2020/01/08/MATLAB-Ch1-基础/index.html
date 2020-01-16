@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta name="generator" content="Hexo 3.9.0">
+    <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <meta name="author" content="Linrui Zhang">
+
+
+
+
+
+<title>MATLAB_Ch1_基础 | Zhanglr&#39;s Blog</title>
+
+
+
+    <link rel="icon" href="/favicon.ico">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/js/script.js"></script>
+    
+    <script src="/js/tocbot.min.js"></script>
+    
+
+
+
+    
+    
+        
+    
+
+
+</head>
+<body>
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">Home·主页</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/archives">Posts·文章</a>
+                
+                    <a class="menu-item" href="/category">Categories·分类</a>
+                
+                    <a class="menu-item" href="/about">About·关于我</a>
+                
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
+            </div>
+
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">Home·主页</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/archives">Posts·文章</a>
+                
+                    <a class="menu-item" href="/category">Categories·分类</a>
+                
+                    <a class="menu-item" href="/about">About·关于我</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+        <div class="main">
+            <div class="container">
+    
+    
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">Expand all</a>
+        <a onclick="go_top()">Back to top</a>
+        <a onclick="go_bottom()">Go to bottom</a>
+    </div>
+</div>
+
+<script>
+    document.ready(
+        function () {
+            tocbot.init({
+                tocSelector: '.tocbot-list',
+                contentSelector: '.post-content',
+                headingSelector: 'h1, h2, h3, h4, h5',
+                collapseDepth: 1,
+                orderedList: false,
+                scrollSmooth: true,
+            })
+        }
+    )
+
+    function expand_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 6,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "collapse_toc()");
+        b.innerHTML = "Collapse all"
+    }
+
+    function collapse_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 1,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "expand_toc()");
+        b.innerHTML = "Expand all"
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+</script>
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">MATLAB_Ch1_基础</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">Linrui Zhang</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">January 8, 2020&nbsp;&nbsp;12:27:05</a>
+                        </span>
+                    
+                    
+                        <span class="post-category">
+                    Category:
+                            
+                                <a href="/category/MATLAB/">MATLAB</a>
+                            
+                        </span>
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <h2 id="MATLAB数据类型"><a href="#MATLAB数据类型" class="headerlink" title="MATLAB数据类型"></a>MATLAB数据类型</h2><img src="5.JPG" width="550">
+
+<p>用whos查看所有变量信息和类型</p>
+<img src="6.JPG" width="550">
+
+<p>如果要看单个的，就在工作区双击变量查看</p>
+<p>几个预定义的特殊变量：</p>
+<ul>
+<li>ans</li>
+<li>i or j</li>
+<li>inf : ∞</li>
+<li>eps: 2.24e-016</li>
+<li>NaN: Not a Number</li>
+<li>pi: Π</li>
+</ul>
+<p>numerical数据类型转换：</p>
+<img src="7.JPG" width="550">
+
+<h2 id="Display-format"><a href="#Display-format" class="headerlink" title="Display format"></a>Display format</h2><table>
+<thead>
+<tr>
+<th>Style</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>format long</td>
+<td>3.141592653589793</td>
+</tr>
+<tr>
+<td>format short</td>
+<td>3.1416</td>
+</tr>
+<tr>
+<td>formant longE</td>
+<td>3.141592653589793e+00</td>
+</tr>
+<tr>
+<td>format shortE</td>
+<td>3.1416e+00</td>
+</tr>
+<tr>
+<td>format rat</td>
+<td>3/13 (用分数显示)</td>
+</tr>
+</tbody></table>
+<h2 id="script界面基本操作"><a href="#script界面基本操作" class="headerlink" title="script界面基本操作"></a>script界面基本操作</h2><img src="1.JPG">
+
+<ol>
+<li>查找内置function按钮。</li>
+<li>单行注释按钮，如果需要注释多行，可以选中多行，右键选择comment。</li>
+<li>%%符号是分节(section)符号，可以只运行指定节代码。</li>
+<li>左键点击行号后的横线设置debug断点。</li>
+</ol>
+<h2 id="debug模式"><a href="#debug模式" class="headerlink" title="debug模式"></a>debug模式</h2><img src="2.JPG" width="500">
+
+<ol>
+<li>debug模式下，&gt;&gt;变成K&gt;&gt;，说明在调试模式，可以在命令行输出查看变量。</li>
+<li>debug模式下，鼠标在某变量上悬停，就可以显示变量值。</li>
+<li>debug模式下的继续执行会运行到下一个断点。</li>
+</ol>
+<h2 id="智能缩进"><a href="#智能缩进" class="headerlink" title="智能缩进"></a>智能缩进</h2><p>选中→右键→智能缩进</p>
+<h2 id="if-elseif-else"><a href="#if-elseif-else" class="headerlink" title="if-elseif-else"></a>if-elseif-else</h2><figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">a=<span class="number">3</span>;</span><br><span class="line"><span class="keyword">if</span> <span class="built_in">rem</span>(a,<span class="number">2</span>) == <span class="number">0</span> <span class="comment">% rem refers to remainder</span></span><br><span class="line">    <span class="built_in">disp</span>(<span class="string">'a is even'</span>)</span><br><span class="line"><span class="keyword">else</span></span><br><span class="line">    <span class="built_in">disp</span>(<span class="string">'a is odd'</span>)</span><br><span class="line"><span class="keyword">end</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="switch"><a href="#switch" class="headerlink" title="switch"></a>switch</h2><figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">input_num = <span class="number">1</span>;</span><br><span class="line"><span class="keyword">switch</span> input_num</span><br><span class="line">    <span class="keyword">case</span> <span class="number">-1</span></span><br><span class="line">        <span class="built_in">disp</span>(<span class="string">'negative 1'</span>)</span><br><span class="line">    <span class="keyword">case</span> <span class="number">1</span></span><br><span class="line">        <span class="built_in">disp</span>(<span class="string">'positive 1'</span>)</span><br><span class="line">    <span class="keyword">otherwise</span></span><br><span class="line">        <span class="built_in">disp</span>(<span class="string">'other value'</span>)</span><br><span class="line"><span class="keyword">end</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="while"><a href="#while" class="headerlink" title="while"></a>while</h2><figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">n = <span class="number">1</span>;</span><br><span class="line"><span class="keyword">while</span> prod(<span class="number">1</span>:n) &lt; <span class="number">100</span>  <span class="comment">%求多少的阶乘才小于100</span></span><br><span class="line">    n = n+<span class="number">1</span>;</span><br><span class="line"><span class="keyword">end</span></span><br><span class="line"><span class="built_in">disp</span>(n) <span class="comment">% 5</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="for"><a href="#for" class="headerlink" title="for"></a>for</h2><p>for variable = start:increment:end</p>
+<p>​        commands</p>
+<p>end</p>
+<figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> <span class="built_in">i</span>=<span class="number">1</span>:<span class="number">5</span></span><br><span class="line">    a(<span class="built_in">i</span>)=<span class="number">2</span>^<span class="built_in">i</span>;</span><br><span class="line"><span class="keyword">end</span></span><br><span class="line"><span class="built_in">disp</span>(a) <span class="comment">% 2 4 8 16 32</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="tic-toc计算用时"><a href="#tic-toc计算用时" class="headerlink" title="tic-toc计算用时"></a>tic-toc计算用时</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">tic</span><br><span class="line">...</span><br><span class="line">toc</span><br></pre></td></tr></table></figure>
+
+<p>会输出时间已过多少多少秒，可以多次调用。</p>
+<h2 id="Tips-for-Script-Writing"><a href="#Tips-for-Script-Writing" class="headerlink" title="Tips for Script Writing"></a>Tips for Script Writing</h2><ul>
+<li><p>clear all</p>
+</li>
+<li><p>close all</p>
+</li>
+<li><p>使用;避免不想要的输出</p>
+</li>
+<li><p>使用…换行</p>
+<figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">A = [<span class="number">1</span>,<span class="number">2</span>,</span><br><span class="line">    <span class="number">3</span>,<span class="number">4</span>]   <span class="comment">% 矩阵</span></span><br><span class="line">B = [<span class="number">1</span>,<span class="number">2</span>,...</span><br><span class="line">    <span class="number">3</span>,<span class="number">4</span>]   <span class="comment">% 向量</span></span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<h2 id="Content-of-MATLAB-Functions"><a href="#Content-of-MATLAB-Functions" class="headerlink" title="Content of MATLAB Functions"></a>Content of MATLAB Functions</h2><p><code>edit(which(&#39;mean.m&#39;))</code>打开MATLAB内置的mean函数。</p>
+<img src="3.JPG" width="500">
+
+<p>基本格式是</p>
+<p>function outputs = file_name(inputs)</p>
+<p>%Comment</p>
+<p>code</p>
+<p>end</p>
+<h2 id="User-Define-Functions"><a href="#User-Define-Functions" class="headerlink" title="User Define Functions"></a>User Define Functions</h2><p>新建一个freebody.m，注意函数名和文件名相同。保存至main.m的同级目录下。</p>
+<figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">x</span> = <span class="title">freebody</span><span class="params">(x0,v0,t)</span></span></span><br><span class="line"><span class="comment">% calculation of free falling 自由落体深度计算</span></span><br><span class="line"><span class="comment">% x0 : initial displacement in m</span></span><br><span class="line"><span class="comment">% v0 : initial velocity in m/sec</span></span><br><span class="line"><span class="comment">% t : the elapsed time in sec</span></span><br><span class="line"><span class="comment">% x : the depth of falling in m</span></span><br><span class="line">x = x0 + v0.*t + <span class="number">0.5</span>*<span class="number">9.8</span>*t.*t;</span><br></pre></td></tr></table></figure>
+
+<p>在main.m或command命令中调用：</p>
+<figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">freebody(<span class="number">0</span>,<span class="number">0</span>,<span class="number">10</span>) <span class="comment">% 输出为ans = 490</span></span><br><span class="line">freebody([<span class="number">0</span> <span class="number">1</span>],[<span class="number">0</span> <span class="number">1</span>],[<span class="number">10</span> <span class="number">5</span>]) <span class="comment">% 输出为ans = 490.0000  128.5000</span></span><br></pre></td></tr></table></figure>
+
+<p>多输出例子：<code>function [a F] = acc(v1,t1,v2,t2)</code></p>
+<h2 id="Function-Default-Variables"><a href="#Function-Default-Variables" class="headerlink" title="Function Default Variables"></a>Function Default Variables</h2><p>这些内建参数是可以之间调用的。</p>
+<table>
+<thead>
+<tr>
+<th>内建参数</th>
+<th>参数意义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>nargin</td>
+<td>输入参数个数</td>
+</tr>
+<tr>
+<td>nargout</td>
+<td>输出结果个数</td>
+</tr>
+<tr>
+<td>varargin</td>
+<td>输入参数变量大小的数组</td>
+</tr>
+<tr>
+<td>varargout</td>
+<td>输出结果变量大小的数组</td>
+</tr>
+</tbody></table>
+<h2 id="Function-Handles"><a href="#Function-Handles" class="headerlink" title="Function Handles"></a>Function Handles</h2><p>匿名函数的作用，不用单独建立m函数了。</p>
+<figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">f = @(x) <span class="built_in">exp</span>(<span class="number">-2</span>*x);</span><br><span class="line">x = <span class="number">0</span>:<span class="number">0.1</span>:<span class="number">2</span>;</span><br><span class="line"><span class="built_in">plot</span>(x,f(x));</span><br></pre></td></tr></table></figure>
+
+<img src="4.JPG" width="500">
+        </div>
+
+        
+            <section class="post-copyright">
+                
+                    <p class="copyright-item">
+                        <span>Author:</span>
+                        <span>Linrui Zhang</span>
+                    </p>
+                
+                
+                
+                
+
+            </section>
+        
+        <section class="post-tags">
+            <div>
+                <span>Tag(s):</span>
+                <span class="tag">
+                    
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">back</a>
+                <span>· </span>
+                <a href="/">home</a>
+            </div>
+        </section>
+        <section class="post-nav">
+            
+                <a class="prev" rel="prev" href="/2020/01/09/MATLAB-Ch2-绘图/">MATLAB_Ch2_绘图</a>
+            
+            
+            <a class="next" rel="next" href="/2020/01/03/tensorflow1-X-Ch2-进阶概念/">tensorflow1.X_Ch2_进阶概念</a>
+            
+        </section>
+
+
+    </article>
+</div>
+
+        </div>
+        <footer id="footer" class="footer">
+    <div class="copyright">
+        <span>© Linrui Zhang | Powered by <a href="https://hexo.io" target="_blank">Hexo</a> & <a href="https://github.com/Siricee/hexo-theme-Chic" target="_blank">Chic</a></span>
+    </div>
+</footer>
+
+    </div>
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","model":{"jsonPath":"/live2dw/assets/hijiki.model.json"},"display":{"position":"right","width":200,"height":400},"mobile":{"show":true},"log":false,"tagMode":false});</script></body>
+</html>
