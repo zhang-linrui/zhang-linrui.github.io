@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta name="generator" content="Hexo 3.9.0">
+    <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <meta name="author" content="Linrui Zhang">
+
+
+
+
+
+<title>ROS_Ch1_话题、服务与动作 | Zhanglr&#39;s Blog</title>
+
+
+
+    <link rel="icon" href="/favicon.ico">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/js/script.js"></script>
+    
+    <script src="/js/tocbot.min.js"></script>
+    
+
+
+
+    
+    
+        
+    
+
+
+</head>
+<body>
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">Home·主页</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/archives">Posts·文章</a>
+                
+                    <a class="menu-item" href="/category">Categories·分类</a>
+                
+                    <a class="menu-item" href="/about">About·关于我</a>
+                
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
+            </div>
+
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">Home·主页</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/archives">Posts·文章</a>
+                
+                    <a class="menu-item" href="/category">Categories·分类</a>
+                
+                    <a class="menu-item" href="/about">About·关于我</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+        <div class="main">
+            <div class="container">
+    
+    
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">Expand all</a>
+        <a onclick="go_top()">Back to top</a>
+        <a onclick="go_bottom()">Go to bottom</a>
+    </div>
+</div>
+
+<script>
+    document.ready(
+        function () {
+            tocbot.init({
+                tocSelector: '.tocbot-list',
+                contentSelector: '.post-content',
+                headingSelector: 'h1, h2, h3, h4, h5',
+                collapseDepth: 1,
+                orderedList: false,
+                scrollSmooth: true,
+            })
+        }
+    )
+
+    function expand_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 6,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "collapse_toc()");
+        b.innerHTML = "Collapse all"
+    }
+
+    function collapse_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 1,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "expand_toc()");
+        b.innerHTML = "Expand all"
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+</script>
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">ROS_Ch1_话题、服务与动作</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">Linrui Zhang</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">January 21, 2020&nbsp;&nbsp;21:43:49</a>
+                        </span>
+                    
+                    
+                        <span class="post-category">
+                    Category:
+                            
+                                <a href="/category/ROS/">ROS</a>
+                            
+                        </span>
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <h2 id="话题、服务、动作机制的对比"><a href="#话题、服务、动作机制的对比" class="headerlink" title="话题、服务、动作机制的对比"></a>话题、服务、动作机制的对比</h2><table>
+<thead>
+<tr>
+<th>类型</th>
+<th>最佳使用场景</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>话题</td>
+<td>单工通信，尤其是接收方有多个时（如传感器数据流）</td>
+</tr>
+<tr>
+<td>服务</td>
+<td>简单快速的请求/响应式场景（如同步查询节点当前状态），阻塞</td>
+</tr>
+<tr>
+<td>动作</td>
+<td>复杂不定时长的请求/响应式场景（如导航前往一个点），非阻塞，会收到反馈，可以更新或中断</td>
+</tr>
+</tbody></table>
+<h2 id="建立basic环境"><a href="#建立basic环境" class="headerlink" title="建立basic环境"></a>建立basic环境</h2><p>本文建立了一个basic包，后面所有的实验都是在这个包里完成。需要自己建立/src,/msg,/srv,/action文件夹。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">cd ~/catkin_ws/src</span><br><span class="line">catkin_create_pkg basic rospy</span><br><span class="line">tree</span><br></pre></td></tr></table></figure>
+
+<img src="1.JPG" width="400">
+
+<h2 id="话题topic"><a href="#话题topic" class="headerlink" title="话题topic"></a>话题topic</h2><p>ROS是一个图结构，可执行程序组成了一个个节点，他们之间的通讯与数据交换构成了边。而完成通讯的最常用方式就是通过话题（topic）机制。<strong>话题表示的是一个定义了类型的消息（message）流，且是一种发布（publish/subscribe）机制。</strong></p>
+<p>话题的发布者必须声明话题名和承载该话题的消息类型，然后就可以发布真实的数据到这一话题。</p>
+<p>话题的订阅者可以向roscore发出请求订阅这个话题，并与发布者建立联系，之后该话题上的所有消息都会被发一份到这个节点上来。</p>
+<h3 id="一写程序"><a href="#一写程序" class="headerlink" title="一写程序"></a>一写程序</h3><p><strong>topic_publisher.py</strong></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># BEGIN ALL</span></span><br><span class="line"><span class="comment"># BEGIN SHEBANG</span></span><br><span class="line"><span class="comment">#!/usr/bin/env python</span></span><br><span class="line"><span class="comment"># END SHEBANG</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># BEGIN IMPORT</span></span><br><span class="line"><span class="keyword">import</span> rospy</span><br><span class="line"><span class="comment"># END IMPORT</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># BEGIN STD_MSGS</span></span><br><span class="line"><span class="keyword">from</span> std_msgs.msg <span class="keyword">import</span> Int32</span><br><span class="line"><span class="comment"># END STD_MSGS</span></span><br><span class="line"></span><br><span class="line">rospy.init_node(<span class="string">'topic_publisher'</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># BEGIN PUB</span></span><br><span class="line">pub = rospy.Publisher(<span class="string">'counter'</span>, Int32, queue_size=<span class="number">5</span>) <span class="comment">#话题名+消息类型</span></span><br><span class="line"><span class="comment"># END PUB</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># BEGIN LOOP</span></span><br><span class="line">rate = rospy.Rate(<span class="number">2</span>) <span class="comment"># 频率为2，与rate.sleep()连用</span></span><br><span class="line">count = <span class="number">0</span></span><br><span class="line"><span class="keyword">while</span> <span class="keyword">not</span> rospy.is_shutdown():</span><br><span class="line">    pub.publish(count)</span><br><span class="line">    count += <span class="number">1</span></span><br><span class="line">    rate.sleep()</span><br><span class="line"><span class="comment"># END LOOP</span></span><br><span class="line"><span class="comment"># END ALL</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>topic_subscriber.py</strong></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># BEGIN ALL</span></span><br><span class="line"><span class="comment">#!/usr/bin/env python</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> rospy</span><br><span class="line"><span class="keyword">from</span> std_msgs.msg <span class="keyword">import</span> Int32</span><br><span class="line"></span><br><span class="line"><span class="comment"># 回调函数定义了接收到消息后的动作</span></span><br><span class="line"><span class="comment"># BEGIN CALLBACK</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">callback</span><span class="params">(msg)</span>:</span></span><br><span class="line">    <span class="keyword">print</span> msg.data</span><br><span class="line"><span class="comment"># END CALLBACK</span></span><br><span class="line"></span><br><span class="line">rospy.init_node(<span class="string">'topic_subscriber'</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># BEGIN SUBSCRIBER</span></span><br><span class="line">sub = rospy.Subscriber(<span class="string">'counter'</span>, Int32, callback) <span class="comment"># 话题名+类型+回调函数</span></span><br><span class="line"><span class="comment"># END SUBSCRIBER</span></span><br><span class="line"></span><br><span class="line">rospy.spin() <span class="comment"># 把循环和结束交给ros的好方法</span></span><br><span class="line"><span class="comment"># END ALL</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="二赋权限"><a href="#二赋权限" class="headerlink" title="二赋权限"></a>二赋权限</h3><p><code>chmod u+x *.py</code></p>
+<p>不然<code>rosrun basic XXX.py</code>会报错</p>
+<h3 id="三改配置"><a href="#三改配置" class="headerlink" title="三改配置"></a>三改配置</h3><p>package.xml里需添加std_msgs包的依赖，因为用到了std_msgs/Int32类型的消息。<code>&lt;depend&gt;std_msgs&lt;/depend&gt;</code></p>
+<h3 id="rostopic命令帮助"><a href="#rostopic命令帮助" class="headerlink" title="rostopic命令帮助"></a>rostopic命令帮助</h3><ul>
+<li><p>rostopic list : 查找当前活跃的话题</p>
+</li>
+<li><p>rostopic echo counter : 接收counter话题并在显示器上打印data内容</p>
+</li>
+<li><p>rostopic info counter : 查询counter话题的信息，包括类型、发布者、订阅者</p>
+</li>
+<li><p>rostopic pub counter std_msgs/Int32 10000 : 人为的发布一条消息</p>
+</li>
+</ul>
+<h2 id="锁存话题"><a href="#锁存话题" class="headerlink" title="锁存话题"></a>锁存话题</h2><p>有些大的且不变的消息，比如地图，有可能只发一次。消息不会停留在ros中，如果订阅话题的同时，希望能收到发布者之前发的最后一条消息，要借助锁存机制。</p>
+<p><code>pub = rospy.Publisher(&#39;map&#39;,nav_msgs/OccupancyGrid,latched=True)</code></p>
+<h3 id="自定义消息"><a href="#自定义消息" class="headerlink" title="自定义消息"></a>自定义消息</h3><ul>
+<li><p>在/msg文件夹下建立消息的定义文件，如Complex.msg</p>
+</li>
+<li><p>修改package.xml(详见《ROS机器人编程》41页)</p>
+</li>
+<li><p>修改CMakeLists.txt(详见《ROS机器人编程》41页)</p>
+</li>
+<li><p>编译生成可<code>from  basic.msg import Complex</code>的类，在<code>~/catkin_ws/devel/lib/python2.7/dist-packages/basic/msg</code>中</p>
+</li>
+</ul>
+<h3 id="rosmsg命令帮助"><a href="#rosmsg命令帮助" class="headerlink" title="rosmsg命令帮助"></a>rosmsg命令帮助</h3><ul>
+<li>rosmsg info Complex : 看消息定义</li>
+<li>rosmsg package basic : 看包内定义的所有消息</li>
+</ul>
+<h2 id="服务"><a href="#服务" class="headerlink" title="服务"></a>服务</h2>
+        </div>
+
+        
+            <section class="post-copyright">
+                
+                    <p class="copyright-item">
+                        <span>Author:</span>
+                        <span>Linrui Zhang</span>
+                    </p>
+                
+                
+                
+                
+
+            </section>
+        
+        <section class="post-tags">
+            <div>
+                <span>Tag(s):</span>
+                <span class="tag">
+                    
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">back</a>
+                <span>· </span>
+                <a href="/">home</a>
+            </div>
+        </section>
+        <section class="post-nav">
+            
+                <a class="prev" rel="prev" href="/2020/01/21/ROS-Ch2-移动机器人与导航/">ROS_Ch2_移动机器人与导航</a>
+            
+            
+            <a class="next" rel="next" href="/2020/01/21/ROS-使用小知识/">ROS_使用小知识</a>
+            
+        </section>
+
+
+    </article>
+</div>
+
+        </div>
+        <footer id="footer" class="footer">
+    <div class="copyright">
+        <span>© Linrui Zhang | Powered by <a href="https://hexo.io" target="_blank">Hexo</a> & <a href="https://github.com/Siricee/hexo-theme-Chic" target="_blank">Chic</a></span>
+    </div>
+</footer>
+
+    </div>
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","model":{"jsonPath":"/live2dw/assets/hijiki.model.json"},"display":{"position":"right","width":200,"height":400},"mobile":{"show":true},"log":false,"tagMode":false});</script></body>
+</html>

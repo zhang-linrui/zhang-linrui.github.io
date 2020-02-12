@@ -11,7 +11,7 @@
 
 
 
-<title>MATLAB_Ch2_绘图 | Zhanglr&#39;s Blog</title>
+<title>Ubuntu_4_Ubuntu系统管理员必备 | Zhanglr&#39;s Blog</title>
 
 
 
@@ -169,7 +169,7 @@
     
     <article class="post-wrap">
         <header class="post-header">
-            <h1 class="post-title">MATLAB_Ch2_绘图</h1>
+            <h1 class="post-title">Ubuntu_4_Ubuntu系统管理员必备</h1>
             
                 <div class="post-meta">
                     
@@ -178,14 +178,14 @@
 
                     
                         <span class="post-time">
-                        Date: <a href="#">January 9, 2020&nbsp;&nbsp;10:55:32</a>
+                        Date: <a href="#">January 27, 2020&nbsp;&nbsp;14:26:23</a>
                         </span>
                     
                     
                         <span class="post-category">
                     Category:
                             
-                                <a href="/category/MATLAB/">MATLAB</a>
+                                <a href="/category/Ubuntu/">Ubuntu</a>
                             
                         </span>
                     
@@ -194,27 +194,108 @@
         </header>
 
         <div class="post-content">
-            <h2 id="plot"><a href="#plot" class="headerlink" title="plot"></a>plot</h2><p>plot(x,y)就是绘制每一对坐标，x,y都是向量。如果单纯的plot(y)则把横坐标默认到[1,…,len(y)]</p>
-<figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">x = <span class="number">0</span>:<span class="built_in">pi</span>/<span class="number">20</span>:<span class="number">2</span>*<span class="built_in">pi</span>;</span><br><span class="line">y = <span class="built_in">cos</span>(x);</span><br><span class="line"><span class="built_in">plot</span>(x,y)</span><br></pre></td></tr></table></figure>
+            <h2 id="文件管理"><a href="#文件管理" class="headerlink" title="文件管理"></a>文件管理</h2><table>
+<thead>
+<tr>
+<th>操作</th>
+<th>命令</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>复制文件</td>
+<td>cp &lt;文件名&gt;</td>
+</tr>
+<tr>
+<td>复制文件夹</td>
+<td>cp -r &lt;文件夹名&gt;</td>
+</tr>
+<tr>
+<td>删除文件</td>
+<td>rm &lt;文件名&gt;</td>
+</tr>
+<tr>
+<td>删除文件夹</td>
+<td>rm -r &lt;文件夹名&gt;</td>
+</tr>
+<tr>
+<td>创建文件</td>
+<td>touch &lt;文件名&gt;</td>
+</tr>
+<tr>
+<td>创建文件夹</td>
+<td>mkdir &lt;文件名&gt;</td>
+</tr>
+<tr>
+<td>移动文件/文件夹</td>
+<td>mv src dst</td>
+</tr>
+<tr>
+<td>浏览文件</td>
+<td>cat &lt;文件名&gt;</td>
+</tr>
+<tr>
+<td>赋执行权限</td>
+<td>chmod +x &lt;文件名&gt;</td>
+</tr>
+</tbody></table>
+<h2 id="打包压缩"><a href="#打包压缩" class="headerlink" title="打包压缩"></a>打包压缩</h2><table>
+<thead>
+<tr>
+<th>操作</th>
+<th>命令</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>打包后压缩为一个.gz格式的压缩包</td>
+<td>tar zcvf pack.tar.gz pack/</td>
+</tr>
+<tr>
+<td>打包后压缩为一个.bz2格式的压缩包</td>
+<td>tar jcvf pack.tar.bz2 pack/</td>
+</tr>
+<tr>
+<td>打包后压缩为一个.xz格式的压缩包</td>
+<td>tar Jcvf pack.tar.xz pack/</td>
+</tr>
+</tbody></table>
+<p>z/j/J为格式，c为压缩，v为可视，f为文件名</p>
+<h2 id="解包解压"><a href="#解包解压" class="headerlink" title="解包解压"></a>解包解压</h2><table>
+<thead>
+<tr>
+<th>操作</th>
+<th>命令</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>解包解压到pack文件夹</td>
+<td>tar zxvf pack.tar.gz -C pack/</td>
+</tr>
+<tr>
+<td>解包解压到pack文件夹</td>
+<td>tar jxvf pack.tar.bz2 -C pack/</td>
+</tr>
+<tr>
+<td>解包解压到pack文件夹</td>
+<td>tar Jxvf pack.tar.xz -C pack/</td>
+</tr>
+</tbody></table>
+<p>z/j/J为格式，x为解压，v为可视，f为文件名</p>
+<h2 id="修改属主属组"><a href="#修改属主属组" class="headerlink" title="修改属主属组"></a>修改属主属组</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo chown lrzhang:lrzhang src</span><br></pre></td></tr></table></figure>
 
-<img src="1.JPG" width="300">
+<h2 id="修改权限"><a href="#修改权限" class="headerlink" title="修改权限"></a>修改权限</h2><p>权限码依次是属主u，属组g，其他人o</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">chmod u+x,g-x src</span><br></pre></td></tr></table></figure>
 
-<p>连续两个plot，后一幅图会refresh掉之前的。想要保留，就要hold on，反之，hold off。</p>
-<figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">% 2 curves on one figure</span></span><br><span class="line">x = <span class="number">0</span>:<span class="built_in">pi</span>/<span class="number">20</span>:<span class="number">2</span>*<span class="built_in">pi</span>;</span><br><span class="line">y1 = <span class="built_in">cos</span>(x);</span><br><span class="line">y2 = <span class="built_in">sin</span>(x);</span><br><span class="line"><span class="built_in">hold</span> on;</span><br><span class="line"><span class="built_in">plot</span>(x,y1);</span><br><span class="line"><span class="built_in">plot</span>(x,y2);</span><br><span class="line"><span class="built_in">hold</span> off;</span><br></pre></td></tr></table></figure>
+<p>或直接改权限码</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">chmod 755 src</span><br></pre></td></tr></table></figure>
 
-<img src="2.JPG" width="300">
+<p>755 = 111,101,101分别对应u,g,o的r,w,x</p>
+<h2 id="添加开机自启动服务"><a href="#添加开机自启动服务" class="headerlink" title="添加开机自启动服务"></a>添加开机自启动服务</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo gnome-session-properties</span><br></pre></td></tr></table></figure>
 
-<h2 id="plot-style"><a href="#plot-style" class="headerlink" title="plot style"></a>plot style</h2><p>plot(x,y,’str’)指定marker,line和color</p>
-<img src="3.JPG" width="500">
+<h2 id="修改默认终端工具"><a href="#修改默认终端工具" class="headerlink" title="修改默认终端工具"></a>修改默认终端工具</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo update-alternatives --config x-terminal-emulator</span><br></pre></td></tr></table></figure>
 
-<h2 id="legend"><a href="#legend" class="headerlink" title="legend"></a>legend</h2><figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">x = <span class="number">0</span>:<span class="built_in">pi</span>/<span class="number">20</span>:<span class="number">2</span>*<span class="built_in">pi</span>;</span><br><span class="line">y1 = <span class="built_in">cos</span>(x);</span><br><span class="line">y2 = <span class="built_in">sin</span>(x);</span><br><span class="line"><span class="built_in">hold</span> on;</span><br><span class="line"><span class="built_in">plot</span>(x,y1);</span><br><span class="line"><span class="built_in">plot</span>(x,y2);</span><br><span class="line"><span class="built_in">hold</span> off;</span><br><span class="line"><span class="built_in">legend</span>(<span class="string">'cos(x)'</span>,<span class="string">'sin(x)'</span>);</span><br></pre></td></tr></table></figure>
+<img src="1.JPG" width="500">
 
-<img src="4.JPG" width="300">
-
-<h2 id="title-and-lable"><a href="#title-and-lable" class="headerlink" title="title and ?lable"></a>title and ?lable</h2><p>在title和lable中可以使用tex格式语言，使公式更美观。</p>
-<figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">x = <span class="number">0</span>:<span class="number">0.1</span>:<span class="number">2</span>*<span class="built_in">pi</span>;</span><br><span class="line">y1 = <span class="built_in">sin</span>(x);</span><br><span class="line">y2 = <span class="built_in">exp</span>(-x);</span><br><span class="line"><span class="built_in">plot</span>(x,y1,<span class="string">'--*'</span>,x,y2,<span class="string">':o'</span>);</span><br><span class="line">xlabel(<span class="string">'0 - 2\pi'</span>);</span><br><span class="line">ylabel(<span class="string">'values'</span>);</span><br><span class="line">title(<span class="string">'Function Plots of sin(t) and e^&#123;-x&#125;'</span>); <span class="comment">% Latex style mathmatical expression</span></span><br><span class="line"><span class="built_in">legend</span>(<span class="string">'sin(x)'</span>,<span class="string">'e^&#123;-x&#125;'</span>);</span><br></pre></td></tr></table></figure>
-
-<img src="5.JPG" width="300">
+<h2 id="deb包安装"><a href="#deb包安装" class="headerlink" title="deb包安装"></a>deb包安装</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo dpkg -i &lt;packname.deb&gt; #安装</span><br><span class="line">sudo dpkg -r &lt;packname&gt; #卸载</span><br></pre></td></tr></table></figure>
 
 
         </div>
@@ -248,10 +329,8 @@
         </section>
         <section class="post-nav">
             
-                <a class="prev" rel="prev" href="/2020/01/21/ROS-使用小知识/">ROS_使用小知识</a>
             
-            
-            <a class="next" rel="next" href="/2020/01/08/MATLAB-Ch1-基础/">MATLAB_Ch1_基础</a>
+            <a class="next" rel="next" href="/2020/01/27/Ubuntu-3-Ubuntu常见错误解决/">Ubuntu_3_Ubuntu常见错误解决</a>
             
         </section>
 

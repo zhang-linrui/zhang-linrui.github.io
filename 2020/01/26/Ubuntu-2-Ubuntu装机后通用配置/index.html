@@ -11,7 +11,7 @@
 
 
 
-<title>MATLAB_Ch2_绘图 | Zhanglr&#39;s Blog</title>
+<title>Ubuntu_2_Ubuntu装机后通用配置 | Zhanglr&#39;s Blog</title>
 
 
 
@@ -169,7 +169,7 @@
     
     <article class="post-wrap">
         <header class="post-header">
-            <h1 class="post-title">MATLAB_Ch2_绘图</h1>
+            <h1 class="post-title">Ubuntu_2_Ubuntu装机后通用配置</h1>
             
                 <div class="post-meta">
                     
@@ -178,14 +178,14 @@
 
                     
                         <span class="post-time">
-                        Date: <a href="#">January 9, 2020&nbsp;&nbsp;10:55:32</a>
+                        Date: <a href="#">January 26, 2020&nbsp;&nbsp;21:11:55</a>
                         </span>
                     
                     
                         <span class="post-category">
                     Category:
                             
-                                <a href="/category/MATLAB/">MATLAB</a>
+                                <a href="/category/Ubuntu/">Ubuntu</a>
                             
                         </span>
                     
@@ -194,27 +194,57 @@
         </header>
 
         <div class="post-content">
-            <h2 id="plot"><a href="#plot" class="headerlink" title="plot"></a>plot</h2><p>plot(x,y)就是绘制每一对坐标，x,y都是向量。如果单纯的plot(y)则把横坐标默认到[1,…,len(y)]</p>
-<figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">x = <span class="number">0</span>:<span class="built_in">pi</span>/<span class="number">20</span>:<span class="number">2</span>*<span class="built_in">pi</span>;</span><br><span class="line">y = <span class="built_in">cos</span>(x);</span><br><span class="line"><span class="built_in">plot</span>(x,y)</span><br></pre></td></tr></table></figure>
+            <h2 id="静态IP配置"><a href="#静态IP配置" class="headerlink" title="静态IP配置"></a>静态IP配置</h2><ol>
+<li><img src="1.JPG" width="400"></li>
+<li><img src="2.JPG" width="400"></li>
+<li><img src="3.JPG" width="400"></li>
+<li>重启 reboot</li>
+<li>重启后ifconfig验证结果<img src="4.JPG" width="400"></li>
+</ol>
+<h2 id="vi-vim配置"><a href="#vi-vim配置" class="headerlink" title="vi/vim配置"></a>vi/vim配置</h2><p>默认的vim是没有的，只能用vi，但是默认的vi会出现backspace无效，上下左右键乱码等问题，干脆直接上vim。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get remove vim-common</span><br><span class="line">sudo apt-get install vim</span><br></pre></td></tr></table></figure>
 
-<img src="1.JPG" width="300">
+<h2 id="换国内源（阿里源）"><a href="#换国内源（阿里源）" class="headerlink" title="换国内源（阿里源）"></a>换国内源（阿里源）</h2><p>这步一定要在后面安装软件或依赖前做，磨刀不误砍柴工。</p>
+<p><a href="https://www.jianshu.com/p/10ed332caf07" target="_blank" rel="noopener">https://www.jianshu.com/p/10ed332caf07</a></p>
+<p>备份source.list→修改source.list→sudo apt update</p>
+<h2 id="中文输出法"><a href="#中文输出法" class="headerlink" title="中文输出法"></a>中文输出法</h2><p>先安装中文语言支持。system→language support</p>
+<img src="5.JPG" width="400">
 
-<p>连续两个plot，后一幅图会refresh掉之前的。想要保留，就要hold on，反之，hold off。</p>
-<figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">% 2 curves on one figure</span></span><br><span class="line">x = <span class="number">0</span>:<span class="built_in">pi</span>/<span class="number">20</span>:<span class="number">2</span>*<span class="built_in">pi</span>;</span><br><span class="line">y1 = <span class="built_in">cos</span>(x);</span><br><span class="line">y2 = <span class="built_in">sin</span>(x);</span><br><span class="line"><span class="built_in">hold</span> on;</span><br><span class="line"><span class="built_in">plot</span>(x,y1);</span><br><span class="line"><span class="built_in">plot</span>(x,y2);</span><br><span class="line"><span class="built_in">hold</span> off;</span><br></pre></td></tr></table></figure>
+<p>安装ibus-pinyin</p>
+<p><a href="https://blog.csdn.net/qq_39907831/article/details/78772093" target="_blank" rel="noopener">https://blog.csdn.net/qq_39907831/article/details/78772093</a></p>
+<p>注意两次重启的时间，第一次是文中提到的启动ibus框架前，第二次是ibus-setup加入中文找不到中文选项时。</p>
+<img src="6.JPG" width="400">
 
-<img src="2.JPG" width="300">
+<h2 id="GNOME3桌面环境搭建"><a href="#GNOME3桌面环境搭建" class="headerlink" title="GNOME3桌面环境搭建"></a>GNOME3桌面环境搭建</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get install ubuntu-gnome-desktop</span><br></pre></td></tr></table></figure>
 
-<h2 id="plot-style"><a href="#plot-style" class="headerlink" title="plot style"></a>plot style</h2><p>plot(x,y,’str’)指定marker,line和color</p>
-<img src="3.JPG" width="500">
+<p>一定要选择gdm3,完事后重启。</p>
+<p>如果壁纸只能显示为黑色，则：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">gsettings set org.gnome.settings-daemon.plugins.background active true</span><br></pre></td></tr></table></figure>
 
-<h2 id="legend"><a href="#legend" class="headerlink" title="legend"></a>legend</h2><figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">x = <span class="number">0</span>:<span class="built_in">pi</span>/<span class="number">20</span>:<span class="number">2</span>*<span class="built_in">pi</span>;</span><br><span class="line">y1 = <span class="built_in">cos</span>(x);</span><br><span class="line">y2 = <span class="built_in">sin</span>(x);</span><br><span class="line"><span class="built_in">hold</span> on;</span><br><span class="line"><span class="built_in">plot</span>(x,y1);</span><br><span class="line"><span class="built_in">plot</span>(x,y2);</span><br><span class="line"><span class="built_in">hold</span> off;</span><br><span class="line"><span class="built_in">legend</span>(<span class="string">'cos(x)'</span>,<span class="string">'sin(x)'</span>);</span><br></pre></td></tr></table></figure>
+<p>显示正常后删除unity，不然由于不兼容会不能完全展现gnome的美和功能。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get remove unity</span><br><span class="line">reboot</span><br></pre></td></tr></table></figure>
 
-<img src="4.JPG" width="300">
+<img src="7.JPG" width="400">
 
-<h2 id="title-and-lable"><a href="#title-and-lable" class="headerlink" title="title and ?lable"></a>title and ?lable</h2><p>在title和lable中可以使用tex格式语言，使公式更美观。</p>
-<figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">x = <span class="number">0</span>:<span class="number">0.1</span>:<span class="number">2</span>*<span class="built_in">pi</span>;</span><br><span class="line">y1 = <span class="built_in">sin</span>(x);</span><br><span class="line">y2 = <span class="built_in">exp</span>(-x);</span><br><span class="line"><span class="built_in">plot</span>(x,y1,<span class="string">'--*'</span>,x,y2,<span class="string">':o'</span>);</span><br><span class="line">xlabel(<span class="string">'0 - 2\pi'</span>);</span><br><span class="line">ylabel(<span class="string">'values'</span>);</span><br><span class="line">title(<span class="string">'Function Plots of sin(t) and e^&#123;-x&#125;'</span>); <span class="comment">% Latex style mathmatical expression</span></span><br><span class="line"><span class="built_in">legend</span>(<span class="string">'sin(x)'</span>,<span class="string">'e^&#123;-x&#125;'</span>);</span><br></pre></td></tr></table></figure>
+<h2 id="Tweak-Tool配置"><a href="#Tweak-Tool配置" class="headerlink" title="Tweak Tool配置"></a>Tweak Tool配置</h2><ul>
+<li>按super键（windows键），在搜索框搜索tweak tool</li>
+<li>在desktop栏允许icons on desktop</li>
+<li>在extensions栏允许以下实用功能<img src="8.JPG" width="400"></li>
+</ul>
+<h2 id="Terminal配置"><a href="#Terminal配置" class="headerlink" title="Terminal配置"></a>Terminal配置</h2><img src="9.JPG" width="400">
 
-<img src="5.JPG" width="300">
+<h2 id="rar压缩与解压"><a href="#rar压缩与解压" class="headerlink" title="rar压缩与解压"></a>rar压缩与解压</h2><p>ubuntu自带解压zip,tar.xz,gz等开源压缩格式，但不自带解压私有压缩算法rar的功能。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt install rar</span><br></pre></td></tr></table></figure>
+
+<p>rar包自带rar和unrar功能，不用装unrar。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">rar a test.rar a.c b.c c.c   #压缩</span><br><span class="line">rar e test.rar #解压</span><br></pre></td></tr></table></figure>
+
+<h2 id="蓝灯"><a href="#蓝灯" class="headerlink" title="蓝灯"></a>蓝灯</h2><p><a href="https://kangxiaoning.github.io/2016/10/22/ubuntu-install-lantern/" target="_blank" rel="noopener">https://kangxiaoning.github.io/2016/10/22/ubuntu-install-lantern/</a></p>
+<h2 id="远程ssh"><a href="#远程ssh" class="headerlink" title="远程ssh"></a>远程ssh</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get install -y ssh</span><br></pre></td></tr></table></figure>
+
+<p>完事后直接用mobaxterm新建session，使用ssh访问刚固定过的ip即可。</p>
+<h2 id="百度网盘-16-04不行，18-04可"><a href="#百度网盘-16-04不行，18-04可" class="headerlink" title="百度网盘(16.04不行，18.04可)"></a>百度网盘(16.04不行，18.04可)</h2><p><a href="http://pan.baidu.com/download" target="_blank" rel="noopener">http://pan.baidu.com/download</a>下载64位deb包，然后直接安装即可。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo dpkg -i &lt;baidu.....deb&gt;</span><br></pre></td></tr></table></figure>
 
 
         </div>
@@ -248,10 +278,10 @@
         </section>
         <section class="post-nav">
             
-                <a class="prev" rel="prev" href="/2020/01/21/ROS-使用小知识/">ROS_使用小知识</a>
+                <a class="prev" rel="prev" href="/2020/01/27/Ubuntu-3-Ubuntu常见错误解决/">Ubuntu_3_Ubuntu常见错误解决</a>
             
             
-            <a class="next" rel="next" href="/2020/01/08/MATLAB-Ch1-基础/">MATLAB_Ch1_基础</a>
+            <a class="next" rel="next" href="/2020/01/26/Ubuntu-1-VirtualBox安装系统与配置/">Ubuntu_1_VirtualBox安装系统与配置</a>
             
         </section>
 
